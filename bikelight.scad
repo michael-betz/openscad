@@ -2,7 +2,7 @@ $fn=200;
 
 w_light = 55;
 h_light = 20;
-d_corner = 10;
+d_corner = 18;
 
 led_dist = 20;
 screw_dist = 44;
@@ -19,13 +19,15 @@ module led_holder()
 {
 	difference() {
 		// extruded solid
-		linear_extrude(3)
+		linear_extrude(3.5)
 			outline();
-		translate([0, 0, 4 + 1.5]) {  // wall thickness 1.5 mm
+		translate([0, 0, 4 + 3.5 - 2.0]) {  // wall thickness
 			for (i=[-1, 1]) {
 				// LED holes
 				translate([i * led_dist / 2, 0, 0]) {
-					cylinder(d=10, h=8, center=true);
+					translate([0, 0, -1])
+						cylinder(d=6, h=8, center=true);
+					cylinder(d=8, h=8, center=true);
 					cube([3, 17, 8], center=true);
 				}
 				// wire channels
@@ -83,9 +85,9 @@ module half_pipe()
 }
 
 // intersection() {
-// 	translate([0, 50, 0])
-// 		cube([100, 100, 100], center=true);
-// 	union() {
+// 	translate([0, 25, 0])
+// 		cube([100, 50, 100], center=true);
+	union() {
 		translate([0, 0, 10])
 			diffuser();
 		translate([0, 0, -5])
@@ -96,5 +98,5 @@ module half_pipe()
 		translate([0, 0, -39])
 			rotate([0, 180, 0])
 				half_pipe();
-// 	}
+	}
 // }
