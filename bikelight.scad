@@ -26,9 +26,9 @@ module led_holder()
 				// LED holes
 				translate([i * led_dist / 2, 0, 0]) {
 					translate([0, 0, -1])
-						cylinder(d=6, h=8, center=true);
-					cylinder(d=8, h=8, center=true);
-					cube([3, 17, 8], center=true);
+						cylinder(d=6.3, h=8, center=true);
+					cylinder(d=8.3, h=8, center=true);
+					cube([4, 17, 8], center=true);
 				}
 				// wire channels
 				translate([0, i * 7, 0])
@@ -37,6 +37,8 @@ module led_holder()
 				translate([i * screw_dist / 2, 0, 0])
 					cylinder(h=20, d=4.3, center=true);
 			}
+			translate([0, 3, 0])
+				cube(size=[3, led_dist, 8], center=true);
 		}
 	}
 }
@@ -69,7 +71,7 @@ module diffuser()
 
 module half_pipe()
 {
-	d = 38;
+	d = 28;
 	difference() {
 		linear_extrude(10)
 			outline();
@@ -80,23 +82,23 @@ module half_pipe()
 		// screw holes
 		for (i=[-1, 1])
 			translate([i * screw_dist / 2, 0, 5])
-				cylinder(h=20, d=4.3, center=true);
+				cylinder(h=20, d=3.9, center=true);
 	}
 }
 
 // intersection() {
 // 	translate([0, 25, 0])
 // 		cube([100, 50, 100], center=true);
-	union() {
-		translate([0, 0, 10])
-			diffuser();
-		translate([0, 0, -5])
-			led_holder();
-		translate([0, 0, -17])
+	// union() {
+	// 	translate([0, 0, 10])
+	//		diffuser();
+	// 	translate([0, 0, -5])
+	 		// led_holder();
+	// 	translate([0, 0, -17])
 			half_pipe();
 
-		translate([0, 0, -39])
-			rotate([0, 180, 0])
-				half_pipe();
-	}
+	// 	translate([0, 0, -39])
+	// 		rotate([0, 180, 0])
+	// 			half_pipe();
+	// }
 // }
