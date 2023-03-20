@@ -94,9 +94,9 @@ module pcb_holder(){
 }
 
 
-// batt();
-// box();
+batt();
+box();
 
-// color("blue")
-//     translate([0, 0, h_lid / 2 + t_batt / 2 + 0.01])
+color("blue")
+    translate([0, 0, h_lid / 2 + t_batt / 2 + 0.01])
         pcb_holder();
