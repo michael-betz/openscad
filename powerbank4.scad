@@ -10,17 +10,19 @@ t_batt = 39;
 t_wall = 1.2;
 
 // thickness of the PCB holder
-pcb_h = 7;
+pcb_t = 7;
 
 // PCB position
-pcb_x = 13.6;
-pcb_y = -3.01;
-pcb_z = pcb_h / 2 + t_batt / 2 + 0.01;
+h_pcb = 72.5;
+w_pcb = 27;
+pcb_x = w_batt / 2 - w_pcb / 2;
+pcb_y = -h_batt / 2 + h_pcb / 2;
+pcb_z = pcb_t / 2 + t_batt / 2 + 0.01;
 
 // thickness of the top and bottom denim-lined plates
 h_plates = 1;
 t_denim = 1;
-plate_z = t_batt / 2 + h_plates / 2 + pcb_h + t_denim;
+plate_z = t_batt / 2 + h_plates / 2 + pcb_t + t_denim;
 
 module corners(w=10, h=5) {
     for (i = [-1, 1])
@@ -40,8 +42,8 @@ module batt() {
 
 
 module box() {
-    h_box = t_batt + pcb_h + 2 * h_plates + 4 * t_denim;
-    translate([0, 0, pcb_h / 2])
+    h_box = t_batt + pcb_t + 2 * h_plates + 4 * t_denim;
+    translate([0, 0, pcb_t / 2])
         difference() {
             // outer dimensions of box
             cube(size=[w_batt + 2 * t_wall, h_batt + 2 * t_wall, h_box], center=true);
@@ -51,7 +53,7 @@ module box() {
             // translate([0, 0, (t_wall - h_box - 0.01) / 2])
             //     cube(size=[w_batt + t_wall, h_batt + t_wall, t_wall], center=true);
             // USB holes
-            translate([pcb_x, pcb_y, pcb_z - pcb_h / 2])
+            translate([pcb_x, pcb_y, pcb_z - pcb_t / 2])
                 usb_holes();
         }
 }
@@ -86,11 +88,11 @@ module usb_holes() {
 
 module pcb_holder() {
     difference() {
-        cube(size=[w_batt - 1, h_batt - 1, pcb_h], center=true);
+        cube(size=[w_batt - 1, h_batt - 1, pcb_t], center=true);
 
         // cavity for PCB
         translate([pcb_x, pcb_y, 0])
-            cube(size=[33, 73, 10], center=true);
+            cube(size=[w_pcb, h_pcb, 10], center=true);
     }
 }
 
@@ -105,17 +107,17 @@ module denim_plate() {
 
 intersection() {
     union() {
-        // batt();
+        batt();
         box();
 
         // color("orange")
-        //     for (z = [plate_z, -plate_z + pcb_h])
+        //     for (z = [plate_z, -plate_z + pcb_t])
         //         translate([0, 0, z])
         //             denim_plate();
 
-        // color("blue")
-        //     translate([0, 0, pcb_z])
-        //         pcb_holder();
+        color("blue")
+            translate([0, 0, pcb_z])
+                !pcb_holder();
     }
     // translate([0, 100, 0])
     //     cube([200, 200, 200], center=true);
