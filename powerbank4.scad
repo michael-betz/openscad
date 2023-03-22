@@ -4,7 +4,7 @@ $fn=50;
 
 w_batt = 61;
 h_batt = 80;
-t_batt = 39;
+t_batt = 38;
 
 // Make it a multiple of nozzle size
 t_wall = 1.2;
@@ -21,7 +21,7 @@ pcb_z = pcb_t / 2 + t_batt / 2 + 0.01;
 
 // thickness of the top and bottom denim-lined plates
 h_plates = 1;
-t_denim = 1;
+t_denim = 0.75;
 plate_z = t_batt / 2 + h_plates / 2 + pcb_t + t_denim;
 
 module corners(w=10, h=5) {
@@ -75,7 +75,7 @@ module usb_holes() {
             cube(size=[10, 10, 7], center=true);
 
         // button hole
-        translate([-17, -53, 0])
+        translate([-17, -53, -2])
             rotate([90, 0, 0])
                 cylinder(h=10, d=5, center=true);
 
@@ -110,14 +110,14 @@ intersection() {
         batt();
         box();
 
-        // color("orange")
-        //     for (z = [plate_z, -plate_z + pcb_t])
-        //         translate([0, 0, z])
-        //             denim_plate();
+        color("orange")
+            for (z = [plate_z, -plate_z + pcb_t])
+                translate([0, 0, z])
+                    denim_plate();
 
-        color("blue")
-            translate([0, 0, pcb_z])
-                !pcb_holder();
+        // color("blue")
+        //     translate([0, 0, pcb_z])
+        //         !pcb_holder();
     }
     // translate([0, 100, 0])
     //     cube([200, 200, 200], center=true);
