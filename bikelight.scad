@@ -86,19 +86,19 @@ module half_pipe()
 	}
 }
 
-// intersection() {
-// 	translate([0, 25, 0])
-// 		cube([100, 50, 100], center=true);
-	// union() {
-	// 	translate([0, 0, 10])
-	//		diffuser();
-	// 	translate([0, 0, -5])
-	 		// led_holder();
-	// 	translate([0, 0, -17])
+intersection() {
+	translate([0, 25, 0])
+		cube([100, 50, 100], center=true);
+	union() {
+		translate([0, 0, 10])
+			diffuser();
+		translate([0, 0, -5])
+	 		led_holder();
+		translate([0, 0, -17])
 			half_pipe();
 
-	// 	translate([0, 0, -39])
-	// 		rotate([0, 180, 0])
-	// 			half_pipe();
-	// }
-// }
+		translate([0, 0, -39])
+			rotate([0, 180, 0])
+				half_pipe();
+	}
+}
