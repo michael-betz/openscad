@@ -1,11 +1,12 @@
 $fn = $preview ? 21 : 71;
 
+d_pin = 4.2;
+
 module main() {
 	difference() {
 		body();
-		feet(4.2, 35);
+		feet(d_pin, 35);
 	}
-	// feet(3);
 }
 
 module body() {
@@ -40,9 +41,40 @@ module foot(d, h) {
 				cylinder(h=h, d=d, center=true);
 }
 
-intersection() {
-	main();
-	// rotate([0, 0, 2])
-	// 	translate([0, 200, 0])
-	// 		cube(size=[400, 400, 400], center=true);
+module clip() {
+	difference() {
+		scale([1, 0.75, 1])
+			cylinder(h=10, d=d_pin * 2 + 1, center=true);
+		for (i=[-1, 1])
+			translate([i * d_pin / 2.2, 0, 0])
+				rotate([0, i * 3, 0])
+					cylinder(h=21, d=d_pin, center=true);
+	}
 }
+
+module clips_plate() {
+	translate([0, 0, -130])
+		difference() {
+			cylinder(h=2, r=62, center=true);
+			cylinder(h=3, r=53, center=true);
+		}
+
+	for (j=[0:60:360])
+		rotate([0, 0, j])
+			translate([0, 55, -125])
+				rotate([15, 0, 0])
+					clip();
+}
+
+// intersection() {
+	main();
+// 	// rotate([0, 0, 2])
+// 	// 	translate([0, 200, 0])
+// 	// 		cube(size=[400, 400, 400], center=true);
+// }
+
+feet(3);
+
+// clip();
+
+clips_plate();
