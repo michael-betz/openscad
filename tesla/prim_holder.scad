@@ -2,12 +2,12 @@ $fn=75;
 
 r_plate = 163 / 2;
 h_plate = 4.6 + 0.2;
-T = 5;   // plastic thickness / primary height
+T = 8;   // plastic thickness / primary height
 A = 25;  // slot depth
-cone_offset = 3;
-h_holder = 25;
-d_wire = 3.1;
-N_holders =6;
+cone_angle = 20;
+h_holder = 36;
+d_wire = 3.5;
+N_holders = 6;
 
 d_mounting_hole = 3.6;
 
@@ -22,18 +22,19 @@ module 2d_shape() {
 			[0, -T],
 			[A + T, -T],
 			[A + T, T + h_plate],
-			[T + cone_offset, T + h_plate],
-			[T + cone_offset, T + h_plate + h_holder],
-			[cone_offset, T + h_plate + h_holder],
+			[T + T * sin(cone_angle), T + h_plate],
+			[T + T * sin(cone_angle) + h_holder * sin(cone_angle), T + h_plate + h_holder],
+			[(h_holder + T) * sin(cone_angle), T + h_plate + h_holder],
 			[0, h_plate],
 			[A, h_plate],
 			[A, 0]
 		]);
-		translate([T + cone_offset, T + h_plate, 0])
-			for (i = [d_wire / 2: d_wire: h_holder]) {
-				translate([0, i, 0]) circle(r=d_wire / 2);
+		translate([(T + d_wire / 2) * sin(cone_angle) + T, T + h_plate + d_wire / 2, 0])
+			for (i = [0: d_wire: h_holder]) {
+				translate([i * sin(cone_angle), i, 0])
+					circle(r=d_wire / 2);
 			}
-		chamfer_val = 1.5;
+		chamfer_val = 3;
 		translate([A + T - chamfer_val, T + h_plate - chamfer_val])
 			chamfer_block();
 		translate([A + T - chamfer_val, -T + chamfer_val])
@@ -49,8 +50,8 @@ module 3d_shape() {
 		rotate_extrude(angle=45 / 4, $fn=200)
 			translate([r_plate - A, 0, 0]) 2d_shape();
 		// Drill a mounting hole
-		translate([r_temp * cos(alpha), r_temp * sin(alpha), -6])
-			cylinder(h=10, r=d_mounting_hole / 2, center=false, $fn=20);
+		translate([r_temp * cos(alpha), r_temp * sin(alpha), -12])
+			cylinder(h=15, r=d_mounting_hole / 2, center=false, $fn=20);
 	}
 }
 
