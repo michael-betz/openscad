@@ -41,39 +41,50 @@ module foot(d, h) {
 				cylinder(h=h, d=d, center=true);
 }
 
-module clip() {
-	difference() {
+module clip_p() {
+	clip_t()
 		scale([1, 0.75, 1])
 			cylinder(h=10, d=d_pin * 2 + 1, center=true);
+}
+
+module clip_n() {
+	clip_t()
 		for (i=[-1, 1])
 			translate([i * d_pin / 2.2, 0, 0])
 				rotate([0, i * 3, 0])
 					cylinder(h=21, d=d_pin, center=true);
-	}
+}
+
+module clip_t() {
+	for (j=[0:60:360])
+		rotate([0, 0, j])
+			translate([0, 55, 5])
+				rotate([15, 0, 0])
+					children();
 }
 
 module clips_plate() {
-	translate([0, 0, -130])
-		difference() {
-			cylinder(h=2, r=62, center=true);
-			cylinder(h=3, r=53, center=true);
+	difference() {
+		union() {
+			translate([0, 0, 1])
+				cylinder(h=2, r=62, center=true);
+					clip_p();
 		}
-
-	for (j=[0:60:360])
-		rotate([0, 0, j])
-			translate([0, 55, -125])
-				rotate([15, 0, 0])
-					clip();
+		clip_n();
+		cylinder(h=5, r=53, center=true);
+		translate([0, 0, -50])
+			cube([200, 200, 100], center=true);
+	}
 }
 
 // intersection() {
-	main();
+	// main();
 // 	// rotate([0, 0, 2])
 // 	// 	translate([0, 200, 0])
 // 	// 		cube(size=[400, 400, 400], center=true);
 // }
 
-feet(3);
+// feet(3);
 
 // clip();
 
