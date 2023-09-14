@@ -1,6 +1,6 @@
 $fn = $preview ? 21 : 71;
 
-include <roundedcube.scad>
+include <../roundedcube.scad>
 
 module tree() {
 	rotate([0, 90, 0])
@@ -35,17 +35,17 @@ module spikes() {
 		for (i=[-3, -2, -1, 1, 2, 3])
 			translate([i * 14, j * 32, -60])
 				rotate([j * 15, -i * 7, 0])
-					cylinder(h=150, d=4, center=true);
+					cylinder(h=150, d=3.5, center=true);
 }
 
-color("white")
-	tree();
+// color("white")
+// 	tree();
 
 // color("red")
 // 	spikes();
 
-#holder_cut(false);
-#holder_cut(true);
+holder_cut(false);
+// #holder_cut(true);
 
 // translate([0, 0, -120])
 // 	cube([150, 120, 5], radius=5, center=true);
