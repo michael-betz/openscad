@@ -11,11 +11,11 @@ module holder() {
 	difference() {
 		roundedcube(size=[50, 50, 30], center=true, radius=5);
 		rotate([0, 90, 0])
-			cylinder(h=100, d=21, center=true);
+			cylinder(h=100, d=22.5, center=true);
 		for (i=[-1,1])
 			translate([0, i * 15, 0]) {
-				cylinder(h=100, d=5, center=true);
-				translate([0, 0, 15])
+				cylinder(h=26, d=4.5, center=true);
+				translate([0, 0, -15])
 					cylinder(h=12, d=10, center=true);
 			}
 		spikes();
