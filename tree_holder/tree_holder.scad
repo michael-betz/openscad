@@ -11,7 +11,7 @@ module holder() {
 	difference() {
 		roundedcube(size=[50, 50, 30], center=true, radius=5);
 		rotate([0, 90, 0])
-			cylinder(h=100, d=22.5, center=true);
+			cylinder(h=100, d=23, center=true);
 		for (i=[-1,1])
 			translate([0, i * 15, 0]) {
 				cylinder(h=26, d=4.5, center=true);
@@ -44,8 +44,8 @@ module spikes() {
 // color("red")
 // 	spikes();
 
-holder_cut(false);
-// #holder_cut(true);
+// holder_cut(false);
+holder_cut(true);
 
 // translate([0, 0, -120])
 // 	cube([150, 120, 5], radius=5, center=true);
