@@ -3,7 +3,7 @@ $fn = 75;
 module valve() {
 	difference() {
 		cylinder(h=20, d=6.6, center=true);
-		translate([-5 - 3.3 + 1, 0 ,0])
+		translate([-5 - 3.3 + 1.05, 0 ,0])
 			cube([10, 10, 21], center=true);
 	}
 	for (a=[0:60:350]) {
