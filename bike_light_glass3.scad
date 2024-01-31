@@ -1,4 +1,4 @@
-$fn=20;
+$fn=100;
 include <roundedcube.scad>
 
 module blocks() {
@@ -8,12 +8,12 @@ module blocks() {
 		rotate([90, 0, 0])
 			cylinder(d=d_mink);
 		difference() {
-			translate([0, -1.5 + 5, 0])
-				cube(size=[75 - d_mink, 3, 70 - d_mink], center=true);
+			translate([0, 8, 0])
+				cube(size=[75 - d_mink, 5, 70 - d_mink], center=true);
 			// triangle shape
 			for (s=[-1, 1])
-				translate([s * (50 - d_mink), 0, 0])
-					rotate([0, -s * 10, 0])
+				translate([s * (37 - d_mink), 8, 0])
+					rotate([0, -s * 6.5, 0])
 						cube(size=[50, 15, 150], center=true);
 		}
 	}
@@ -25,13 +25,21 @@ module light() {
 		for (s=[-1, 1]) {
 			// holes to attach glass tube
 			for (t=[-1, 1])
-				translate([8.5 * s, 0, 18 * t])
+				translate([9 * s, 0, 22 * t])
 					rotate([90, 0, 0])
-						cylinder(h=20, d=1.5, center=true);
+						cylinder(h=30, d=1.75, center=true);
 		}
 		// notch for glass tube
 		translate([0, -5, 0])
 			cylinder(h=100, d=15.5, center=true);
+		// zip tie holes
+		for (s=[-1, 1])
+			translate([7 * s, 5, -31])
+				rotate([90, 0, 0])
+					cylinder(h=20, d=4, center=true);
+		translate([0, 5, 31])
+			rotate([90, 0, 0])
+				cylinder(h=20, d=4, center=true);
 	}
 }
 
