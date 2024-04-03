@@ -1,4 +1,4 @@
-$fn = 64;
+$fn = 128;
 
 include <b10s3.scad>
 include <../roundedcube.scad>
@@ -35,14 +35,14 @@ module tube_holder(is_top=false) {
 module tube_holder_all() {
 	difference() {
 		union() {
-			tube_holder(0);
+			// tube_holder(0);
 			tube_holder(1);
 		}
 		for (i=[-1,1]) {
 			translate([x, 40 * i, 75])
-				cylinder(h=150, d=7, center=true);
-			translate([x, 40 * i, h])
-				cylinder(h=2 * 5, d=15, center=true, $fn=6);
+				cylinder(h=150, d=6.5, center=true);
+			translate([x, 40 * i, h + 6.5 - 7])
+				cylinder(h=8, d=11, center=true);  //, $fn=6);
 		}
 		roundedcube(size=[100, 60, 60], center=true, radius=15);
 	}
@@ -57,9 +57,9 @@ module plate() {
 	}
 }
 
-translate([0, 0, 5])
-	#cube(size=[150, 50, 1], center=true);
+// translate([0, 0, 5])
+// 	#cube(size=[150, 50, 1], center=true);
 
-pos_crt();
+// pos_crt();
 tube_holder_all();
-plate();
+// plate();
