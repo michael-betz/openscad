@@ -1,5 +1,5 @@
-$fn = 128;
-// $fn = 32;
+// $fn = 128;
+$fn = 32;
 
 include <b10s3.scad>
 include <../roundedcube.scad>
@@ -14,7 +14,7 @@ module pos_crt(s=1.0) {
 }
 
 
-h = 110;
+h = 95;
 z = 2.5 + h / 2;
 x = 10;
 
@@ -39,7 +39,7 @@ module tube_holder_all() {
 	difference() {
 		tube_holder_base();
 		for (i=[-1,1]) {
-			translate([x, 40 * i, h - 12 + 7])
+			translate([x, 40 * i, h + 5])
 				cylinder(h=35, d=9, center=true);  //, $fn=6);
 			translate([x, 40 * i, 50])
 				cylinder(h=150, d=5.25, center=true);
@@ -73,7 +73,7 @@ module poly_block(is_top=false) {
 	function ftop(x,y) = is_top ? 70 : fct(x, y) - 1;
 	function fbottom(x,y) = is_top ? fct(x, y) + 1 : -70;
 
-    poly_surface(-30, 50, -55, 55, 100, 100);
+    poly_surface(-30, 50, -55, 55, $fn, $fn);
 }
 
 module tube_holder_cut(is_top=false) {
@@ -81,10 +81,10 @@ module tube_holder_cut(is_top=false) {
 		tube_holder_all();
 		translate([0, 0, 66])
 			poly_block(is_top);
-		if (is_top)
-			// rotate([0, crt_angle, 0])
-				translate([0, 0, h - 10])
-					poly_block(0);
+		// if (is_top)
+		// 	// rotate([0, crt_angle, 0])
+		// 		translate([0, 0, h - 10])
+		// 			poly_block(0);
 	}
 }
 
@@ -95,14 +95,14 @@ module tube_holder_cut(is_top=false) {
 
 // pos_crt();
 
-// intersection() {
-// 	union() {
-		// tube_holder_cut(1);
+intersection() {
+	union() {
+		tube_holder_cut(1);
 		tube_holder_cut(0);
-// 	}
-// 	translate([0, -10, 0])
-// 		cube([100, 100, 500], center=true);
-// }
+	}
+	// translate([0, -10, 0])
+	// 	cube([100, 100, 500], center=true);
+}
 
 // plate();
 
