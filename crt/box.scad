@@ -14,15 +14,14 @@ module pos_crt(s=1.0) {
 }
 
 
-h = 95;
+h = 90;
 z = 2.5 + h / 2;
-x = 10;
 
 module tube_holder_base() {
 	difference() {
-		translate([x, 0, z])
+		translate([0, 0, z])
 			roundedcubez(size=[60, 100, h], center=true, radius=15);
-		pos_crt(1.05);
+		pos_crt(1.075);
 	}
 }
 
@@ -39,16 +38,16 @@ module tube_holder_all() {
 	difference() {
 		tube_holder_base();
 		for (i=[-1,1]) {
-			translate([x, 40 * i, h + 5])
+			translate([0, 40 * i, h + 5])
 				cylinder(h=35, d=9, center=true);  //, $fn=6);
-			translate([x, 40 * i, 50])
+			translate([0, 40 * i, 50])
 				cylinder(h=150, d=5.25, center=true);
 		}
 		// Square nuts
-		translate([x, 0, 62])
+		translate([0, 0, 62])
 			cube(size=[8.5, 90, 3], center=true);
 
-		translate([x, 0, 10])
+		translate([0, 0, 10])
 			cube(size=[8.5, 90, 3], center=true);
 
 		// bridge cut-out
@@ -59,9 +58,18 @@ module tube_holder_all() {
 module plate() {
 	difference() {
 		roundedcubez(size=[300, 100, 5], center=true, radius=15);
-		for (i=[-1,1])
-			translate([x, 40 * i, 0])
-				cylinder(h=10, d=7, center=true);
+		for (i=[-1,1]) {
+			// tube holder holes
+			translate([0, 40 * i, 0])
+				cylinder(h=10, d=5.25, center=true);
+			// socket block holes
+			translate([-139, 40 * i, 0])
+				cylinder(h=10, d=5.25, center=true);
+			// UI board holes
+			translate([139, 40 * i, 0])
+				cylinder(h=10, d=5.25, center=true);
+		}
+		pcb();
 	}
 }
 
@@ -81,6 +89,8 @@ module tube_holder_cut(is_top=false) {
 		tube_holder_all();
 		translate([0, 0, 66])
 			poly_block(is_top);
+
+		// Get parametric surface on the top lid
 		// if (is_top)
 		// 	// rotate([0, crt_angle, 0])
 		// 		translate([0, 0, h - 10])
@@ -89,11 +99,15 @@ module tube_holder_cut(is_top=false) {
 }
 
 // PCB
-// color("green")
-// 	translate([0, 0, 5])
-// 		cube(size=[150, 50, 1], center=true);
-
-// pos_crt();
+module pcb() {
+	translate([0, 0, 10]) {
+		cube(size=[150, 50, 1], center=true);
+		translate([0, 0, -10])
+			linear_extrude(height=20, center=true)
+				rotate([0, 0, 90])
+					import("pcb.svg", center=true);
+	}
+}
 
 intersection() {
 	union() {
@@ -104,6 +118,11 @@ intersection() {
 	// 	cube([100, 100, 500], center=true);
 }
 
-// plate();
 
-// tube_holder_all();
+pos_crt();
+
+color("green")
+	pcb();
+
+// projection()
+	plate();
