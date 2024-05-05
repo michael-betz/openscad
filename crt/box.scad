@@ -43,15 +43,16 @@ module tube_holder_all() {
 			translate([0, 40 * i, 50])
 				cylinder(h=150, d=5.25, center=true);
 		}
-		// Square nuts
-		translate([0, 0, 62])
+		// Top square nuts
+		translate([0, 0, 60])
 			cube(size=[8.5, 90, 3], center=true);
 
+		// Bottom square nuts
 		translate([0, 0, 10])
 			cube(size=[8.5, 90, 3], center=true);
 
 		// bridge cut-out
-		roundedcube(size=[100, 60, 60], center=true, radius=15);
+		roundedcube(size=[100, 60, 62], center=true, radius=15);
 	}
 }
 
@@ -76,7 +77,7 @@ module plate() {
 module poly_block(is_top=false) {
 	include <../poly_surface.scad>
 
-	function fct(x, y) = 3 * sin(10 * x - 10) * sin(9 * y + 100) + sin(crt_angle) * x;
+	function fct(x, y) = 3 * sin(10 * x + 100) * sin(9 * y + 100) + sin(crt_angle) * x;
 
 	function ftop(x,y) = is_top ? 70 : fct(x, y) - 1;
 	function fbottom(x,y) = is_top ? fct(x, y) + 1 : -70;
@@ -109,13 +110,27 @@ module pcb() {
 	}
 }
 
-intersection() {
-	union() {
-		tube_holder_cut(1);
-		tube_holder_cut(0);
+module hv_cap() {
+	height = 65;
+	wall = 2;
+	difference(){
+		roundedcubez(size=[50, 100, height], center=true, radius=15);
+		translate([10 + wall, 0, -wall / 2])
+			roundedcubez(size=[50 + 20, 100 - 25, height - wall], center=true, radius=15);
+		translate([60, 0, 0])
+			cube(size=[100, 150, 100], center=true);
 	}
-	// translate([0, -10, 0])
-	// 	cube([100, 100, 500], center=true);
+}
+
+
+tube_holder_cut(1);
+tube_holder_cut(0);
+
+intersection() {
+	translate([-125, 0, (60 + 5) / 2])
+		hv_cap();
+	// translate([-290, 0, 0])
+	// 	cube([300, 300, 300], center=true);
 }
 
 
