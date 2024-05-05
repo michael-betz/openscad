@@ -1,5 +1,5 @@
-// $fn = 128;
-$fn = 32;
+$fn = 128;
+// $fn = 32;
 
 include <b10s3.scad>
 include <../roundedcube.scad>
@@ -112,32 +112,45 @@ module pcb() {
 
 module hv_cap() {
 	height = 65;
-	wall = 2;
+	wall = 3;
 	difference(){
 		roundedcubez(size=[50, 100, height], center=true, radius=15);
-		translate([10 + wall, 0, -wall / 2])
-			roundedcubez(size=[50 + 20, 100 - 25, height - wall], center=true, radius=15);
+
+		translate([10 + wall, 0, -wall / 2 - 1])
+			roundedcubez(size=[50 + 20, 100 - 25, height - wall + 2], center=true, radius=15);
 		translate([60, 0, 0])
 			cube(size=[100, 150, 100], center=true);
+
+		for (i=[-1, 1]) {
+			// screw holes
+			translate([-14, 40 * i, -30])
+				cylinder(h=40, d=5.25, center=true);
+		}
+
+		// square nut slot
+		translate([-14, 0, -25])
+			cube(size=[8.5, 90, 3], center=true);
 	}
 }
 
 
-tube_holder_cut(1);
-tube_holder_cut(0);
+module main() {
+	tube_holder_cut(1);
+	tube_holder_cut(0);
+	translate([-125, 0, (60 + 5) / 2])
+		!hv_cap();
+	pos_crt();
+	color("green")
+		pcb();
+	plate();
+}
+
 
 intersection() {
-	translate([-125, 0, (60 + 5) / 2])
-		hv_cap();
-	// translate([-290, 0, 0])
+	main();
+	// translate([0, 190, 0])
 	// 	cube([300, 300, 300], center=true);
 }
 
 
-pos_crt();
 
-color("green")
-	pcb();
-
-// projection()
-	plate();
