@@ -40,8 +40,8 @@ module pin() {
 }
 
 module pocket() {
-	translate([0, -2.8, 0])
-		cube(size=[1.8, 1.4, 10], center=true);
+	translate([0, -2.7, 0])
+		cube(size=[2.0, 1.6, 10], center=true);
 	translate([0, -2, 2])
 		cube(size=[2.75, 3, 4], center=true);
 
