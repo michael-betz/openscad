@@ -40,18 +40,15 @@ module pin() {
 }
 
 module pocket() {
-	difference() {
-		translate([0, -2, 0])
-			cube(size=[2.2, 2, 10], center=true);
-		translate([0, -1.0, -3])
-			cube(size=[3, 1.5, 4], center=true);
-	}
-	translate([0, -1.6 - 0.6, 0.6])
-		cube(size=[1, 2, 1], center=true);
-	cylinder(h=10, d=3, center=true);
+	translate([0, -2.8, 0])
+		cube(size=[1.8, 1.4, 10], center=true);
+	translate([0, -2, 2])
+		cube(size=[2.75, 3, 4], center=true);
 
-	translate([0, 0, 3.75])
-		cylinder(h=3, d1=3, d2=8, center=true);
+	// translate([0, -1.0, -2.5])
+	// 	cube(size=[3, 1.5, 4], center=true);
+	// translate([0, -1.6 - 0.6, 0.6])
+	// 	cube(size=[1, 2, 1], center=true);
 }
 
 // cylinder(h=20, d=43, center=true);
@@ -59,13 +56,18 @@ module pocket() {
 // 	cylinder(h=16, d=2, center=true);
 
 // color("red")
-// 	translate([0, -2.85, 4])
-// 		contact();
+// 	rotate([-5, 0, 0])
+// 		translate([0, -3.1, 4])
+// 			contact();
 
 intersection() {
 	difference() {
-		cube(size=[8, 8, 8], center=true);
-		pocket();
+		cube(size=[8, 9, 8], center=true);
+		cylinder(h=10, d=3.4, center=true);
+		rotate([-5, 0, 0])
+			pocket();
+		translate([0, 0, 3.75])
+			cylinder(h=3, d1=3, d2=8, center=true);
 	}
 	// translate([50, 0, 0])
 	// 	cube(size=[100, 100, 100], center=true);
