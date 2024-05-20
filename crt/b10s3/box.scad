@@ -1,8 +1,8 @@
-$fn = 128;
-// $fn = 32;
+// $fn = 128;
+$fn = 32;
 
 include <b10s3.scad>
-include <../roundedcube.scad>
+include <../../roundedcube.scad>
 
 crt_angle = 15;
 
@@ -75,7 +75,7 @@ module plate() {
 }
 
 module poly_block(is_top=false) {
-	include <../poly_surface.scad>
+	include <../../poly_surface.scad>
 
 	function fct(x, y) = 3 * sin(10 * x + 100) * sin(9 * y + 100) + sin(crt_angle) * x;
 
@@ -138,7 +138,7 @@ module main() {
 	tube_holder_cut(1);
 	tube_holder_cut(0);
 	translate([-125, 0, (60 + 5) / 2])
-		!hv_cap();
+		hv_cap();
 	pos_crt();
 	color("green")
 		pcb();
