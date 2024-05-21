@@ -1,5 +1,4 @@
-// $fn = 128;
-$fn = 32;
+$fn = $preview ? 30 : 100;
 
 include <crt.scad>
 include <../../roundedcube.scad>
@@ -138,7 +137,7 @@ module main() {
 		pos_crt();
 	tube_holder_back(-310, 1);
 	tube_holder_back(-310, 0);
-	tube_holder_mid();
+	!tube_holder_mid();
 	plate();
 
 	include <socket_b12_37.scad>
@@ -151,8 +150,8 @@ module main() {
 
 intersection() {
 	main();
-	// translate([0, 150, 0])
-	// 	cube([1000, 300, 500], center=true);
+	translate([0, 110, 0])
+		cube([1000, 300, 500], center=true);
 }
 
 
