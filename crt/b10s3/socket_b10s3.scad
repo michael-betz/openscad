@@ -1,4 +1,4 @@
-$fn = 60;
+$fn = $preview ? 30 : 100;
 
 // Pin position with angular coordinates
 module make_pin() {
