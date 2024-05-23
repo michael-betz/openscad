@@ -1,4 +1,4 @@
-// $fn = 60;
+$fn = 60;
 
 // Pin position with angular coordinates
 module make_pin() {
@@ -27,10 +27,19 @@ module pin() {
 }
 
 module pocket() {
-	translate([0, -3, 0])
-		cube(size=[2.0, 2.0, 20], center=true);
+	// Square section for cable and crimp connection
+	translate([0, -3, -5])
+		cube(size=[2.0, 2.0, 10.1], center=true);
+	// Wider section at the top, for the flat end of the contact
+	translate([0, -3.6, 3])
+		cube(size=[3.0, 0.8, 10], center=true);
+	// Opening for the contact spring
 	translate([0, -2.5, 3.5])
-		cube(size=[2.75, 3, 7], center=true);
+		cube(size=[1.2, 3, 7], center=true);
+	// Pocket for the little hook to engage in
+	translate([0, -3.75, 3.5])
+		rotate([-7, 0, 0])
+			cube(size=[1, 2, 3], center=true);
 }
 
 module pocket2() {
@@ -52,14 +61,16 @@ module pocket2() {
 
 
 // Little cube for fine-tuning the geometry
-// intersection() {
-// 	difference() {
-// 		cube(size=[8, 9, 8 + 6], center=true);
-// 		pocket2();
-// 	}
-// 	translate([-50, 0, 0])
-// 		cube(size=[100, 100, 100], center=true);
-// }
+intersection() {
+	difference() {
+		translate([0, -1, 0])
+			cube(size=[8, 10, 16], center=true);
+		translate([0, 0, 0.75])
+			pocket2();
+	}
+	// translate([-50, 0, 0])
+	// 	cube(size=[100, 100, 100], center=true);
+}
 
 
 // the notched pin in the middle
