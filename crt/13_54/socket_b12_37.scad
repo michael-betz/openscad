@@ -1,4 +1,4 @@
-$fn = 60;
+// $fn = 60;
 
 // Pin position with angular coordinates
 module make_pin() {

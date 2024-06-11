@@ -64,8 +64,8 @@ function surface_faces (nx,ny) =
     [for (i=[0:nx-2])
            [vt(i,0,nx,nx),
             vt(i+1,0,nx,nx),
-            vb(i+1,0,,nx,nx),
-            vb(i,0,,nx,nx)
+            vb(i+1,0,nx,nx),
+            vb(i,0,nx,nx)
            ]
     ],
     [for (i=[0:nx-2])
