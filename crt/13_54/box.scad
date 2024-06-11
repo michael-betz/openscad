@@ -126,7 +126,7 @@ module plate() {
 				cylinder(h=10, d=5.25, center=true);
 
 			// PCB mounting holes
-			translate([-150, 0, 0])
+			translate([-130, 0, 0])
 				pcb_holes();
 		}
 	}
@@ -137,7 +137,7 @@ module main() {
 		pos_crt();
 	tube_holder_back(-310, 1);
 	tube_holder_back(-310, 0);
-	!tube_holder_mid();
+	tube_holder_mid();
 	plate();
 
 	include <socket_b12_37.scad>
@@ -148,11 +148,12 @@ module main() {
 }
 
 
-intersection() {
-	main();
-	translate([0, 110, 0])
-		cube([1000, 300, 500], center=true);
-}
+// intersection() {
+// 	main();
+// 	translate([0, 110, 0])
+// 		cube([1000, 300, 500], center=true);
+// }
 
-
+projection()
+	plate();
 

@@ -1,5 +1,4 @@
-// $fn = 128;
-$fn = 32;
+$fn = $preview ? 30 : 100;
 
 include <b10s3.scad>
 include <../../roundedcube.scad>
@@ -135,22 +134,24 @@ module hv_cap() {
 
 
 module main() {
-	tube_holder_cut(1);
+	// tube_holder_cut(1);
 	tube_holder_cut(0);
 	translate([-125, 0, (60 + 5) / 2])
 		hv_cap();
-	pos_crt();
-	color("green")
-		pcb();
+	// pos_crt();
+	// color("green")
+	// 	pcb();
 	plate();
 }
 
 
 intersection() {
 	main();
-	// translate([0, 190, 0])
-	// 	cube([300, 300, 300], center=true);
+	translate([0, 190, 0])
+		cube([300, 300, 300], center=true);
 }
 
+// projection()
+// 	plate();
 
 
