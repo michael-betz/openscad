@@ -158,27 +158,79 @@ module hv_cap() {
 }
 
 
-module main() {
-	tube_holder_cut(1);
+module ui_cap() {
+	height = 30;
+	wall = 3;
+	difference(){
+		roundedcubez(size=[50, 100, height], center=true, radius=15);
+
+		// Cut the front at an angle
+		translate([57, 0, 30])
+			rotate([0, 60, 0])
+				cube(size=[100, 150, 100], center=true);
+
+		// Cut the back
+		translate([-45, 0, 30])
+			cube(size=[100, 110, 100], center=true);
+
+		// Cut the middle
+		translate([0, 0, 40])
+			cube(size=[100, 65, 100], center=true);
+
+		for (i=[-1, 1]) {
+			// screw holes
+			translate([14, 40 * i, -22])
+				cylinder(h=40, d=5.25, center=true);
+			// square nut slot
+			translate([-3, 40 * i, -height / 2 + 5])
+				cube(size=[45, 8.5, 3], center=true);
+
+			translate([14, 40 * i, 5]) {
+				rotate([0, 60, 0]) {
+					// PCB holes
+					cylinder(h=40, d=5.25, center=true);
+					// square nut
+					translate([0, 0, -13])
+						cube(size=[8.5, 8.5, 10], center=true);
+				}
+			}
+		}
+
+	}
+
+	// square nut
+	translate([14, 40, -height / 2 + 5])
+		square_nut_m5();
+
 	// screw
-	translate([0, 40, 77.6])
-		bolt_m5_20_hx();
-	tube_holder_cut(0);
-	translate([-125, 0, (60 + 5) / 2])
-		hv_cap();
-	pos_crt();
-	color("green")
-		pcb();
+	translate([14, 40, -20.0])
+		bolt_m5_16_cs(true);
+}
+
+
+module main() {
+	// tube_holder_cut(1);
+	// screw
+	// translate([0, 40, 77.6])
+	// 	bolt_m5_20_hx();
+	// tube_holder_cut(0);
+	// translate([-125, 0, (60 + 5) / 2])
+	// 	hv_cap();
+	// pos_crt();
+	// color("green")
+	// 	pcb();
 	// screw to hold PCB
 	// #translate([70.8, 0, -2])
 	// 	bolt_m3_20_cs(true);
 	plate();
+	translate([125, 0, (30 + 5) / 2])
+		!ui_cap();
 }
 
 intersection() {
 	main();
-	translate([0, 190, 0])
-		cube([300, 300, 300], center=true);
+	// translate([0, 190, 0])
+	// 	cube([300, 300, 300], center=true);
 }
 
 // projection()
