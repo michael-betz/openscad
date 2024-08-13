@@ -2,18 +2,18 @@ $fn = $preview ? 30 : 100;
 
 include <b10s3.scad>
 include <../../roundedcube.scad>
+include <../../ali_parts.scad>
 
-crt_angle = 15;
+crt_angle = 17;
 
 module pos_crt(s=1.0) {
-	translate([0, 0, 65])
+	translate([8, 0, 71])
 		rotate([0, -crt_angle, 0])
 			scale(s)
 				crt();
 }
 
-
-h = 90;
+h = 93;
 z = 2.5 + h / 2;
 
 module tube_holder_base() {
@@ -51,7 +51,7 @@ module tube_holder_all() {
 			cube(size=[8.5, 90, 3], center=true);
 
 		// bridge cut-out
-		roundedcube(size=[100, 60, 62], center=true, radius=15);
+		roundedcube(size=[100, 60, 70], center=true, radius=15);
 	}
 }
 
@@ -100,12 +100,30 @@ module tube_holder_cut(is_top=false) {
 
 // PCB
 module pcb() {
-	translate([0, 0, 10]) {
-		cube(size=[150, 50, 1], center=true);
-		translate([0, 0, -10])
-			linear_extrude(height=20, center=true)
-				rotate([0, 0, 90])
-					import("pcb.svg", center=true);
+	// Use 10 mm standoffs
+	translate([6.7, 0, 1.95 + 1.6 + 10]) {
+		cube(size=[150, 50, 1.6], center=true);
+		// hole pattern
+		for (y=[-21, 21]) {
+			for (x=[11, 56, 139]) {
+				translate([75 - x, y, -5 - 1.6 / 2]) {
+					spacer_m3_10();
+					translate([0, 0, -6])
+						cylinder(h=12, d=3.2, center=true);
+				}
+			}
+		}
+		// Filament transformer
+		color("white")
+			translate([-15, 0, 10])
+				cube(size=[22, 13, 20], center=true);
+		// Potentiometers
+		color("blue")
+			translate([-75 - 6.75 / 2 + 38.5, 25 - 4.82 / 2, 3.5])
+				cube(size=[6.75, 4.82, 7], center=true);
+		color("blue")
+			translate([75 + 6.75 / 2 - 51.5, -25 + 4.82 / 2, 3.5])
+				cube(size=[6.75, 4.82, 7], center=true);
 	}
 }
 
@@ -130,20 +148,32 @@ module hv_cap() {
 		translate([-14, 0, -25])
 			cube(size=[8.5, 90, 3], center=true);
 	}
+
+	// screw
+	translate([-14, 40, -35.0])
+		bolt_m5_16_cs(true);
+	// square nut
+	translate([-14, 40, -25])
+		square_nut_m5();
 }
 
 
 module main() {
-	// tube_holder_cut(1);
+	tube_holder_cut(1);
+	// screw
+	translate([0, 40, 77.6])
+		bolt_m5_20_hx();
 	tube_holder_cut(0);
 	translate([-125, 0, (60 + 5) / 2])
 		hv_cap();
-	// pos_crt();
-	// color("green")
-	// 	pcb();
+	pos_crt();
+	color("green")
+		pcb();
+	// screw to hold PCB
+	// #translate([70.8, 0, -2])
+	// 	bolt_m3_20_cs(true);
 	plate();
 }
-
 
 intersection() {
 	main();

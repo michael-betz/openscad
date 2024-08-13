@@ -2,6 +2,7 @@ $fn = $preview ? 30 : 100;
 
 include <crt.scad>
 include <../../roundedcube.scad>
+include <../../ali_parts.scad>
 
 crt_angle = 10;
 
@@ -44,12 +45,15 @@ module tube_holder_mid(x_pos=0) {
 		}
 
 		// Bottom square nuts
-		translate([0, 0, 10])
+		translate([0, 0, 8])
 			cube(size=[8.5, 90, 3], center=true);
 
 		// bridge cut-out
 		roundedcube(size=[100, 60, 62], center=true, radius=15);
 	}
+	// screws
+	// #translate([x_pos, -40, -2])
+	// 	bolt_m5_16_cs(true);
 }
 
 module tube_holder_back(x_pos=0, is_top=1) {
@@ -86,7 +90,7 @@ module tube_holder_back(x_pos=0, is_top=1) {
 					cylinder(h=40, d=9, center=true);
 
 				// square nut slot
-				for (zp=[10, h / 2 - 5])
+				for (zp=[10, h / 2])
 					translate([21, 40 * i, zp])
 						cube(size=[20, 8.5, 3], center=true);
 			}
@@ -95,6 +99,13 @@ module tube_holder_back(x_pos=0, is_top=1) {
 				roundedcube(size=[50, 60, 62], center=true, radius=15);
 		}
 	}
+	// screws
+	// translate([x_pos - 21, -40, -2])
+	// 	bolt_m5_16_cs(true);
+	// #translate([x_pos + 27.0, -40, -2])
+	// 	bolt_m5_16_cs(true);
+	// translate([x_pos + 27.0, -40, 58])
+	// 	bolt_m5_20_hx(false);
 }
 
 module pcb_holes() {
@@ -140,11 +151,11 @@ module main() {
 	tube_holder_mid();
 	plate();
 
-	include <socket_b12_37.scad>
-	translate([-313.5, 0, 46.5])
-		rotate([0, -crt_angle, 0])
-			rotate([0, 90, 0])
-				socket();
+	// include <socket_b12_37.scad>
+	// translate([-313.5, 0, 46.5])
+	// 	rotate([0, -crt_angle, 0])
+	// 		rotate([0, 90, 0])
+	// 			socket();
 }
 
 

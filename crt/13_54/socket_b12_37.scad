@@ -1,4 +1,8 @@
-$fn = 60;
+// Telefunken, Lager-Nr. 30223,
+// Fuer Diheptalsockel B12-37
+
+$fn = 80;
+
 
 // Pin position with angular coordinates
 module make_pin() {
@@ -61,16 +65,16 @@ module pocket2() {
 
 
 // Little cube for fine-tuning the geometry
-intersection() {
-	difference() {
-		translate([0, -1, 0])
-			cube(size=[8, 10, 16], center=true);
-		translate([0, 0, 0.75])
-			pocket2();
-	}
+// intersection() {
+// 	difference() {
+// 		translate([0, -1, 0])
+// 			cube(size=[8, 10, 16], center=true);
+// 		translate([0, 0, 0.75])
+// 			pocket2();
+// 	}
 	// translate([-50, 0, 0])
 	// 	cube(size=[100, 100, 100], center=true);
-}
+// }
 
 
 // the notched pin in the middle
@@ -94,4 +98,4 @@ module socket() {
 	}
 }
 
-// socket();
+socket();
