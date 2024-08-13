@@ -199,14 +199,22 @@ module ui_cap() {
 	}
 
 	// square nut
-	translate([14, 40, -height / 2 + 5])
-		square_nut_m5();
+	// translate([14, 40, -height / 2 + 5])
+	// 	square_nut_m5();
 
 	// screw
-	translate([14, 40, -20.0])
-		bolt_m5_16_cs(true);
+	// translate([14, 40, -20.0])
+	// 	bolt_m5_16_cs(true);
 }
 
+module ui_pcb() {
+	translate([16.6, 0, 0])
+		rotate([0, 60, 0])
+			translate([117, -50, 0])
+				rotate([0, 0, 90])
+					linear_extrude(1.6)
+						import("ui_pcb_edge.svg");
+}
 
 module main() {
 	// tube_holder_cut(1);
@@ -223,17 +231,23 @@ module main() {
 	// #translate([70.8, 0, -2])
 	// 	bolt_m3_20_cs(true);
 	plate();
-	translate([125, 0, (30 + 5) / 2])
-		!ui_cap();
+	translate([125, 0, (30 + 5) / 2]) {
+		ui_cap();
+		ui_pcb();
+	}
 }
 
-intersection() {
+// intersection() {
 	main();
-	// translate([0, 190, 0])
-	// 	cube([300, 300, 300], center=true);
-}
+// 	translate([0, 190, 0])
+// 		cube([300, 300, 300], center=true);
+// }
 
 // projection()
 // 	plate();
 
+// projection(true)
+// 	translate([0, 0, -14.3])
+// 		rotate([0, -60, 0])
+// 			ui_cap();
 
