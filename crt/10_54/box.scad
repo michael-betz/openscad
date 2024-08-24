@@ -6,6 +6,7 @@ include <../../ali_parts.scad>
 
 crt_angle = 12;
 plate_width = 110;
+screw_width = plate_width - 16;
 h = 110;
 z = 2.5 + h / 2;
 
@@ -30,18 +31,18 @@ module tube_holder_all() {
 	difference() {
 		tube_holder_base();
 		for (i=[-1,1]) {
-			translate([0, (plate_width / 2 - 8) * i, h + 5])
-				cylinder(h=35, d=9, center=true);  //, $fn=6);
-			translate([0, (plate_width / 2 - 8) * i, 50])
+			translate([0, screw_width / 2 * i, h - 12])
+				cylinder(h=40, d=9, center=true);  //, $fn=6);
+			translate([0, screw_width / 2 * i, 50])
 				cylinder(h=150, d=5.25, center=true);
 		}
 		// Top square nuts
 		translate([0, 0, z_cut - 6])
-			cube(size=[8.5, 90, 3], center=true);
+			cube(size=[8.5, plate_width - 5, 3], center=true);
 
 		// Bottom square nuts
 		translate([0, 0, 10])
-			cube(size=[8.5, 90, 3], center=true);
+			cube(size=[8.5, plate_width - 5, 3], center=true);
 
 		// bridge cut-out
 		roundedcube(size=[100, plate_width - 40, 73], center=true, radius=15);
@@ -105,24 +106,23 @@ module pcb_holes() {
 
 module plate() {
 	plate_l = 310;
-	plate_holes_y = (plate_width / 2 - 8);
 	plate_x = -15;
 	difference() {
 		translate([plate_x, 0, 0])
 			roundedcubez(size=[plate_l, plate_width, 5], center=true, radius=15);
 		for (i=[-1,1]) {
 			// tube_holder_mid holes
-			translate([0, plate_holes_y * i, 0])
+			translate([0, screw_width / 2 * i, 0])
 				cylinder(h=10, d=5.25, center=true);
 
 			// tube_holder_back holes
-			// translate([-plate_l / 2 + plate_x + 14, plate_holes_y * i, 0])
+			// translate([-plate_l / 2 + plate_x + 14, screw_width / 2 * i, 0])
 			// 	cylinder(h=10, d=5.25, center=true);
-			// translate([-plate_l / 2 + plate_x + 62, plate_holes_y * i, 0])
+			// translate([-plate_l / 2 + plate_x + 62, screw_width / 2 * i, 0])
 			// 	cylinder(h=10, d=5.25, center=true);
 
 			// UI board holes
-			translate([plate_l / 2 - 11 + plate_x, plate_holes_y * i, 0])
+			translate([plate_l / 2 - 11 + plate_x, screw_width / 2 * i, 0])
 				cylinder(h=10, d=5.25, center=true);
 
 			// PCB mounting holes
@@ -133,13 +133,13 @@ module plate() {
 }
 
 module main() {
-	// color("white")
-	// 	pos_crt();
+	color("white")
+		pos_crt();
 
 	tube_holder_cut(1);
 	// screw
-	// translate([0, 40, 77.6])
-	// 	bolt_m5_20_hx();
+	translate([0, screw_width / 2, 78])
+		bolt_m5_20_hx();
 	tube_holder_cut(0);
 
 	// tube_holder_back(-310, 1);
@@ -147,8 +147,8 @@ module main() {
 	// tube_holder_mid();
 	plate();
 
-	translate([6-6.7, 0, 0])
-		pcb();
+	// translate([6-6.7, 0, 0])
+	// 	pcb();
 
 	// include <socket_b12_37.scad>
 	// translate([-313.5, 0, 46.5])
