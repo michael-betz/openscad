@@ -9,5 +9,5 @@ difference() {
 			cylinder(h=1.5, d=6.0, center=true);
 	}
 	translate([0, 0, -2])
-		cylinder(h=6, d=2.6, center=true);
+		cylinder(h=6, d=2.7, center=true);
 }

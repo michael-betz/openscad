@@ -195,7 +195,6 @@ module ui_cap() {
 				}
 			}
 		}
-
 	}
 
 	// square nut

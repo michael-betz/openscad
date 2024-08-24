@@ -159,12 +159,12 @@ module main() {
 }
 
 
-// intersection() {
-// 	main();
-// 	translate([0, 110, 0])
-// 		cube([1000, 300, 500], center=true);
-// }
+intersection() {
+	main();
+	translate([0, 110, 0])
+		cube([1000, 300, 500], center=true);
+}
 
-projection()
-	plate();
+// projection()
+// 	plate();
 
