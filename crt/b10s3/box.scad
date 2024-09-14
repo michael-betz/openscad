@@ -3,8 +3,16 @@ $fn = $preview ? 30 : 100;
 include <b10s3.scad>
 include <../../roundedcube.scad>
 include <../../ali_parts.scad>
+include <../crt_lib.scad>
 
 crt_angle = 17;
+
+plate_l=300;
+plate_x=0;
+plate_width = 100;
+screw_width = 80;
+
+pcb_x = 6.7;
 
 module pos_crt(s=1.0) {
 	translate([8, 0, 71])
@@ -55,35 +63,6 @@ module tube_holder_all() {
 	}
 }
 
-module plate() {
-	difference() {
-		roundedcubez(size=[300, 100, 5], center=true, radius=15);
-		for (i=[-1,1]) {
-			// tube holder holes
-			translate([0, 40 * i, 0])
-				cylinder(h=10, d=5.25, center=true);
-			// socket block holes
-			translate([-139, 40 * i, 0])
-				cylinder(h=10, d=5.25, center=true);
-			// UI board holes
-			translate([139, 40 * i, 0])
-				cylinder(h=10, d=5.25, center=true);
-		}
-		pcb();
-	}
-}
-
-module poly_block(is_top=false) {
-	include <../../poly_surface.scad>
-
-	function fct(x, y) = 3 * sin(10 * x + 100) * sin(9 * y + 100) + sin(crt_angle) * x;
-
-	function ftop(x,y) = is_top ? 70 : fct(x, y) - 1;
-	function fbottom(x,y) = is_top ? fct(x, y) + 1 : -70;
-
-    poly_surface(-30, 50, -55, 55, $fn, $fn);
-}
-
 module tube_holder_cut(is_top=false) {
 	intersection() {
 		tube_holder_all();
@@ -97,66 +76,6 @@ module tube_holder_cut(is_top=false) {
 		// 			poly_block(0);
 	}
 }
-
-// PCB
-module pcb() {
-	// Use 10 mm standoffs
-	translate([6.7, 0, 1.95 + 1.6 + 10]) {
-		cube(size=[150, 50, 1.6], center=true);
-		// hole pattern
-		for (y=[-21, 21]) {
-			for (x=[11, 56, 139]) {
-				translate([75 - x, y, -5 - 1.6 / 2]) {
-					spacer_m3_10();
-					translate([0, 0, -6])
-						cylinder(h=12, d=3.2, center=true);
-				}
-			}
-		}
-		// Filament transformer
-		color("white")
-			translate([-15, 0, 10])
-				cube(size=[22, 13, 20], center=true);
-		// Potentiometers
-		color("blue")
-			translate([-75 - 6.75 / 2 + 38.5, 25 - 4.82 / 2, 3.5])
-				cube(size=[6.75, 4.82, 7], center=true);
-		color("blue")
-			translate([75 + 6.75 / 2 - 51.5, -25 + 4.82 / 2, 3.5])
-				cube(size=[6.75, 4.82, 7], center=true);
-	}
-}
-
-module hv_cap() {
-	height = 65;
-	wall = 3;
-	difference(){
-		roundedcubez(size=[50, 100, height], center=true, radius=15);
-
-		translate([10 + wall, 0, -wall / 2 - 1])
-			roundedcubez(size=[50 + 20, 100 - 25, height - wall + 2], center=true, radius=15);
-		translate([60, 0, 0])
-			cube(size=[100, 150, 100], center=true);
-
-		for (i=[-1, 1]) {
-			// screw holes
-			translate([-14, 40 * i, -30])
-				cylinder(h=40, d=5.25, center=true);
-		}
-
-		// square nut slot
-		translate([-14, 0, -25])
-			cube(size=[8.5, 90, 3], center=true);
-	}
-
-	// screw
-	translate([-14, 40, -35.0])
-		bolt_m5_16_cs(true);
-	// square nut
-	translate([-14, 40, -25])
-		square_nut_m5();
-}
-
 
 module ui_cap() {
 	height = 30;
@@ -216,20 +135,15 @@ module ui_pcb() {
 }
 
 module main() {
-	// tube_holder_cut(1);
+	tube_holder_cut(1);
 	// screw
-	// translate([0, 40, 77.6])
-	// 	bolt_m5_20_hx();
-	// tube_holder_cut(0);
-	// translate([-125, 0, (60 + 5) / 2])
-	// 	hv_cap();
-	// pos_crt();
-	// color("green")
-	// 	pcb();
-	// screw to hold PCB
-	// #translate([70.8, 0, -2])
-	// 	bolt_m3_20_cs(true);
-	plate();
+	translate([0, 40, 77.6])
+		bolt_m5_20_hx();
+	tube_holder_cut(0);
+	pos_crt();
+	translate([pcb_x, 0, 0])
+		crt_pcb();
+	crt_plate();
 	translate([125, 0, (30 + 5) / 2]) {
 		ui_cap();
 		ui_pcb();

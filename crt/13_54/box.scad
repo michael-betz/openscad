@@ -1,10 +1,18 @@
 $fn = $preview ? 30 : 100;
 
+crt_angle = 10;
+
+plate_l = 500;
+plate_x = -95;
+plate_width = 100;
+screw_width = 80;
+
+pcb_x = -130;
+
 include <crt.scad>
 include <../../roundedcube.scad>
 include <../../ali_parts.scad>
-
-crt_angle = 10;
+include <../crt_lib.scad>
 
 module pos_crt(s=1.0) {
 	translate([-10, 0, 100])
@@ -108,48 +116,17 @@ module tube_holder_back(x_pos=0, is_top=1) {
 	// 	bolt_m5_20_hx(false);
 }
 
-module pcb_holes() {
-	for (y=[-1, 1])
-		for (x=[0, 45, 128])
-			translate([64 - x, 42 / 2 * y, 0])
-				cylinder(h=30, d=3.2, center=true);
-}
-
-module plate() {
-	plate_w = 500;
-	plate_x = -95;
-	difference() {
-		translate([plate_x, 0, 0])
-			roundedcubez(size=[plate_w, 100, 5], center=true, radius=15);
-		for (i=[-1,1]) {
-			// tube_holder_mid holes
-			translate([0, 40 * i, 0])
-				cylinder(h=10, d=5.25, center=true);
-
-			// tube_holder_back holes
-			translate([-plate_w / 2 + plate_x + 14, 40 * i, 0])
-				cylinder(h=10, d=5.25, center=true);
-			translate([-plate_w / 2 + plate_x + 62, 40 * i, 0])
-				cylinder(h=10, d=5.25, center=true);
-
-			// UI board holes
-			translate([plate_w / 2 - 11 + plate_x, 40 * i, 0])
-				cylinder(h=10, d=5.25, center=true);
-
-			// PCB mounting holes
-			translate([-130, 0, 0])
-				pcb_holes();
-		}
-	}
-}
-
 module main() {
 	color("white")
 		pos_crt();
 	tube_holder_back(-310, 1);
 	tube_holder_back(-310, 0);
 	tube_holder_mid();
-	plate();
+
+	crt_plate(true);
+
+	translate([pcb_x, 0, 0])
+		crt_pcb();
 
 	// include <socket_b12_37.scad>
 	// translate([-313.5, 0, 46.5])
