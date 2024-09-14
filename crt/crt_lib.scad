@@ -1,7 +1,6 @@
 include <../roundedcube.scad>
 include <../ali_parts.scad>
 
-
 // PCB
 module crt_pcb() {
 	// Use 10 mm standoffs
@@ -34,16 +33,6 @@ module crt_pcb_holes() {
 			translate([64 - x, 42 / 2 * y, 0])
 				cylinder(h=30, d=3.2, center=true);
 }
-
-// module crt_pcb_holes() {
-// 	translate([6.7, 0, 1.95 + 1.6 + 10])
-// 		for (y=[-21, 21])
-// 			for (x=[11, 56, 139])
-// 				translate([75 - x, y, -5 - 1.6 / 2])
-// 					translate([0, 0, -6])
-// 						cylinder(h=12, d=3.2, center=true);
-// }
-
 
 module crt_plate(add_back_holder_holes=false) {
 	difference() {
