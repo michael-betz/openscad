@@ -144,10 +144,12 @@ module main() {
 	translate([pcb_x, 0, 0])
 		crt_pcb();
 	crt_plate();
-	translate([125, 0, (30 + 5) / 2]) {
-		ui_cap();
-		ui_pcb();
-	}
+	// translate([125, 0, (30 + 5) / 2]) {
+	// 	ui_cap();
+	// 	ui_pcb();
+	// }
+	translate([plate_l / 2 - 11 + plate_x, 0, 2.5])
+		!encoder_holder_cut();
 }
 
 // intersection() {
