@@ -1,5 +1,5 @@
 from build123d import *
-from numpy import mod
+from build123d import export_stl
 
 plate_width = 110
 screw_width = plate_width - 16
@@ -44,3 +44,5 @@ with BuildPart() as encoder_holder:
         fillet(e, 15)
 
 show_object(encoder_holder)
+
+# export_stl(encoder_holder.part, "encoder_holder.stl")
