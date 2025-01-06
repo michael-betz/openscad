@@ -32,13 +32,13 @@ module tube_holder_base() {
 	}
 }
 
-z_cut = 70;
+z_cut = 63;
 
 module tube_holder_all() {
 	difference() {
 		tube_holder_base();
 		for (i=[-1,1]) {
-			translate([0, screw_width_top / 2 * i, holder_height + 7])
+			translate([0, screw_width_top / 2 * i, holder_height])
 				cylinder(h=40, d=9, center=true);  //, $fn=6);
 			translate([0, screw_width_top / 2 * i, holder_height - 25])
 				cylinder(h=50, d=5.25, center=true);
@@ -77,7 +77,7 @@ module main() {
 
 	tube_holder_cut(1);
 	// screw
-	translate([0, screw_width_top / 2, 78])
+	translate([0, screw_width_top / 2, 70.1])
 		bolt_m5_20_hx();
 	tube_holder_cut(0);
 
@@ -95,8 +95,8 @@ module main() {
 
 intersection() {
 	main();
-	// translate([0, -150 +screw_width / 2, 0])
-	// 	cube([1000, 300, 500], center=true);
+	translate([0, -152 +screw_width / 2, 0])
+		cube([1000, 300, 500], center=true);
 }
 
 // projection()
