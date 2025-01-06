@@ -15,15 +15,39 @@ module make_pin() {
 				children();
 }
 
+module singlePinShape() {
+	translate([1.25 - 1.9 / 2, 0, 0.01])
+		difference() {
+			union() {
+				translate([0, 0, -15])
+					cube([2.5, 2.5, 30], center=true);
+				translate([0, 0, +1 - 7])
+					cube([2.5, 3.5, 2], center=true);
+				translate([0, 0, -15 - 8.5])
+					cube([3.5, 3.5, 30], center=true);
+			}
+			translate([3 - 2.5/2 + 1.9 , 0, 15 - 3])
+				cube([6, 6, 30], center=true);
+		}
+}
+
+// -----------------------
+//  Test piece for 1 pin
+// -----------------------
+// difference() {
+// 	translate([0, 0, -16 / 2 - 0.1])
+// 		cube(size=[6, 6, 16], center=true);
+// 	singlePinShape();
+// }
+
+// -----------------------
+//  B7S2 socket
+// -----------------------
 difference() {
-	cylinder(h=10, d=35, center=true);
-	translate([0, 0, 5])
-		make_pin()
-			cylinder(h=12, d=d_pin * 1.2, center=true);
+	translate([0, 0, -8])
+		cylinder(h=16, d=35, center=true);
+	make_pin()
+		singlePinShape();
 
-	translate([0, 0, -5])
-		make_pin()
-			cylinder(h=12, d=3, center=true);
-
-	cylinder(h=20, d=15, center=true);
+	cylinder(h=40, d=15, center=true);
 }
