@@ -13,12 +13,12 @@ plate_width = 90;
 screw_width_top = plate_width - 20;
 screw_width = plate_width - 16;
 
-holder_height = 90;
+holder_height = 95;
 pcb_x = 0;
 
 module pos_crt(s=1.0) {
-	translate([-85, 0, 40])
-		rotate([180, 90 - crt_angle, 0])
+	translate([90, 0, 93])
+		rotate([0, 90 - crt_angle, 0])
 			scale([s, s, 1])
 				crt();
 }
@@ -32,7 +32,7 @@ module tube_holder_base() {
 	}
 }
 
-z_cut = 63;
+z_cut = 70;
 
 module tube_holder_all() {
 	difference() {
@@ -46,17 +46,17 @@ module tube_holder_all() {
 				cylinder(h=50, d=5.25, center=true);
 
 			// bevel the edges
-			translate([0, -60 * i, 130])
+			translate([0, -60 * i, 135])
 				rotate([-70 * i, 0, 0])
 					cube(size=[100, 100, 100], center=true);
 		}
 		// Top square nuts
 		translate([0, 0, z_cut - 7])
-			cube(size=[8.5, 72, 3], center=true);
+			cube(size=[8.5, screw_width_top + 11, 3], center=true);
 
 		// Bottom square nuts
 		translate([0, 0, 10])
-			cube(size=[8.5, plate_width - 5, 3], center=true);
+			cube(size=[8.5, screw_width + 11, 3], center=true);
 
 		// bridge cut-out
 		roundedcube(size=[100, plate_width - 40, 73], center=true, radius=15);
@@ -77,9 +77,9 @@ module main() {
 
 	tube_holder_cut(1);
 	// screw
-	translate([0, screw_width_top / 2, 70.1])
+	translate([0, screw_width_top / 2, 75.5])
 		bolt_m5_20_hx();
-	tube_holder_cut(0);
+	!tube_holder_cut(0);
 
 	crt_plate();
 
@@ -95,8 +95,9 @@ module main() {
 
 intersection() {
 	main();
-	translate([0, -152 +screw_width / 2, 0])
-		cube([1000, 300, 500], center=true);
+	// translate([0, -152 +screw_width / 2, 0])
+	// translate([500, 0, 0])
+	// 	cube([1000, 300, 500], center=true);
 }
 
 // projection()
