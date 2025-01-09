@@ -75,11 +75,11 @@ module main() {
 	color("white")
 		pos_crt();
 
-	tube_holder_cut(1);
+	!tube_holder_cut(1);
 	// screw
 	translate([0, screw_width_top / 2, 75.5])
 		bolt_m5_20_hx();
-	!tube_holder_cut(0);
+	tube_holder_cut(0);
 
 	crt_plate();
 
