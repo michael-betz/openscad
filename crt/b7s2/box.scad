@@ -13,11 +13,11 @@ plate_width = 90;
 screw_width_top = plate_width - 20;
 screw_width = plate_width - 16;
 
-holder_height = 95;
+holder_height = 98;
 pcb_x = 0;
 
 module pos_crt(s=1.0) {
-	translate([90, 0, 93])
+	translate([90, 0, 95])
 		rotate([0, 90 - crt_angle, 0])
 			scale([s, s, 1])
 				crt();
@@ -28,7 +28,7 @@ module tube_holder_base() {
 	difference() {
 		translate([0, 0, holder_z])
 			roundedcubez(size=[40, plate_width, holder_height], center=true, radius=15);
-		pos_crt(1.05);
+		pos_crt(1.09);
 	}
 }
 
@@ -38,7 +38,7 @@ module tube_holder_all() {
 	difference() {
 		tube_holder_base();
 		for (i=[-1,1]) {
-			translate([0, screw_width_top / 2 * i, holder_height])
+			translate([0, screw_width_top / 2 * i, holder_height - 2.5])
 				cylinder(h=40, d=9, center=true);  //, $fn=6);
 			translate([0, screw_width_top / 2 * i, holder_height - 25])
 				cylinder(h=50, d=5.25, center=true);
@@ -46,7 +46,7 @@ module tube_holder_all() {
 				cylinder(h=50, d=5.25, center=true);
 
 			// bevel the edges
-			translate([0, -60 * i, 135])
+			translate([0, -60 * i, 137])
 				rotate([-70 * i, 0, 0])
 					cube(size=[100, 100, 100], center=true);
 		}
@@ -95,9 +95,9 @@ module main() {
 
 intersection() {
 	main();
-	// translate([0, -152 +screw_width / 2, 0])
-	// translate([500, 0, 0])
-	// 	cube([1000, 300, 500], center=true);
+	translate([0, -152 +screw_width / 2, 0])
+	translate([500, 0, 0])
+		cube([1000, 300, 500], center=true);
 }
 
 // projection()
