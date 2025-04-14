@@ -59,7 +59,7 @@ module tube_holder_all() {
 			cube(size=[8.5, screw_width + 11, 3], center=true);
 
 		// bridge cut-out
-		roundedcube(size=[100, plate_width - 40, 73], center=true, radius=15);
+		roundedcube(size=[100, plate_width - 30, 73], center=true, radius=15);
 	}
 }
 
@@ -75,7 +75,7 @@ module main() {
 	color("white")
 		pos_crt();
 
-	!tube_holder_cut(1);
+	tube_holder_cut(1);
 	// screw
 	translate([0, screw_width_top / 2, 75.5])
 		bolt_m5_20_hx();
@@ -87,7 +87,7 @@ module main() {
 		crt_pcb();
 
 	translate([plate_l / 2 - 11 + plate_x, 0, 2.5])
-		encoder_holder_cut();
+		!encoder_holder_cut();
 
 	translate([plate_l / 2 - 11 + plate_x, -screw_width / 2, -2.6])
 		bolt_m5_16_cs(true);
@@ -95,11 +95,11 @@ module main() {
 
 intersection() {
 	main();
-	translate([0, -152 +screw_width / 2, 0])
-	translate([500, 0, 0])
-		cube([1000, 300, 500], center=true);
+	// translate([0, -152 +screw_width / 2, 0])
+	// translate([500, 0, 0])
+	// 	cube([1000, 300, 500], center=true);
 }
 
 // projection()
-// 	plate();
+// 	crt_plate();
 
