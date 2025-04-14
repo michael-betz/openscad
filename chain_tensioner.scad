@@ -64,7 +64,7 @@ module bike_sprocket() {
 			}
 			cylinder(h=40, d=hole_d, center=true);
 		}
-		cylinder(h=40, d=41, center=true);
+		cylinder(h=40, d=40, center=true);
 	}
 }
 
@@ -75,13 +75,16 @@ module frm() {
 			cylinder(h=50, d=20, center=true);
 }
 
+// Adjust the chain tension with this
+y_dist = 48;
+
 module boxed_sprocket() {
 	// Holding plates
 	for (offs=[-1,1])
-		translate([0, -25, offs * 7.75])
-			roundedcubez(size=[40, 80, 5], center=true, radius=15);
+		translate([0, -(y_dist + 37 / 2)/2 + 6, offs * 7.75])
+			roundedcubez(size=[40, y_dist + 37 / 2 + 12, 5], center=true, radius=15);
 
-	translate([0, -47, 0])
+	translate([0, -y_dist, 0])
 		roundedcubez(size=[40, 37, 19.1], center=true, radius=15);
 }
 
@@ -89,7 +92,7 @@ module all() {
 	difference() {
 		boxed_sprocket();
 		cylinder(h=40, d=hole_d, center=true);
-		translate([0, -47, 0]) {
+		translate([0, -y_dist, 0]) {
 			frm();
 			for (i=[-1,1])
 				for (j=[-1,1])
@@ -100,13 +103,22 @@ module all() {
 }
 
 
-
+// To be printed as 4 parts
 intersection() {
-	union() {
-		bike_sprocket();
-		all();
-	}
-	translate([0, 0, -50])
+	bike_sprocket();
+	translate([0, 0, 50 - 1])
 		cube(size=[100, 200, 100], center=true);
 }
 
+intersection() {
+	bike_sprocket();
+	translate([0, 0, -50 - 1])
+		cube(size=[100, 200, 100], center=true);
+}
+
+// Print this one 2 times
+intersection() {
+	all();
+	translate([0, 0, -50])
+		cube(size=[100, 200, 100], center=true);
+}
