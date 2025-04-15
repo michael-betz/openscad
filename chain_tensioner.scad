@@ -40,7 +40,6 @@ module sprocket(teeth=20, roller=3, pitch=17, thickness=3, tolerance=0.2){
 	}
 }
 
-hole_d = 6;
 
 module bike_sprocket() {
 	// Example for 08B roller chain
@@ -51,8 +50,9 @@ module bike_sprocket() {
 	tolerance=0.2;
 
 	/* [Shaft] */
-	shaft_d=20;
-	shaft_h=10;
+	shaft_d=15;
+	shaft_h=4.0;
+	hole_d = 12;
 
 	intersection() {
 		difference(){
@@ -91,7 +91,7 @@ module boxed_sprocket() {
 module all() {
 	difference() {
 		boxed_sprocket();
-		cylinder(h=40, d=hole_d, center=true);
+		cylinder(h=40, d=6, center=true);
 		translate([0, -y_dist, 0]) {
 			frm();
 			for (i=[-1,1])
@@ -104,17 +104,17 @@ module all() {
 
 
 // To be printed as 4 parts
-intersection() {
-	bike_sprocket();
-	translate([0, 0, 50 - 1])
-		cube(size=[100, 200, 100], center=true);
-}
+// intersection() {
+// 	bike_sprocket();
+// 	translate([0, 0, 50 - 1])
+// 		cube(size=[100, 200, 100], center=true);
+// }
 
-intersection() {
-	bike_sprocket();
-	translate([0, 0, -50 - 1])
-		cube(size=[100, 200, 100], center=true);
-}
+// intersection() {
+// 	bike_sprocket();
+// 	translate([0, 0, -50 - 1])
+// 		cube(size=[100, 200, 100], center=true);
+// }
 
 // Print this one 2 times
 intersection() {
