@@ -50,9 +50,9 @@ module bike_sprocket() {
 	tolerance=0.2;
 
 	/* [Shaft] */
-	shaft_d=15;
-	shaft_h=4.0;
-	hole_d = 12;
+	shaft_d=20;
+	shaft_h=10;
+	hole_d = 12.3;
 
 	intersection() {
 		difference(){
