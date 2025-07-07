@@ -1,3 +1,5 @@
+$fn = $preview ? 30 : 100;
+
 include <../roundedcube.scad>
 include <../ali_parts.scad>
 
@@ -121,23 +123,24 @@ module square2(dx=10, dz=0) {
 }
 
 module bottom_clamp() {
-	clamp_z = 20;
+	clamp_z = 19;
+	clamp_x = 16;
 
 	difference() {
-		cube(size=[60, 40, 60], center=true);
+		cube(size=[65, 40, 60], center=true);
 
 		// central hole
 		cylinder(h=100, d=25, center=true);
 
 		// Slot between the 2 half-blocks
-		cube(size=[70, 1, 70], center=true);
+		cube(size=[70, 2, 70], center=true);
 
 		// Square nut slots
-		square(24, clamp_z)
-			translate([0, 5, 0])
-				cube(size=[20, 3, 8.5], center=true);
+		square(clamp_x + 5, clamp_z)
+			translate([0, 7, 0])
+				cube(size=[18.5, 3, 8.5], center=true);
 
-		square(19, clamp_z) {
+		square(clamp_x, clamp_z) {
 			// Screw holes
 			translate([0, -5, 0])
 				rotate([90, 0, 0])
@@ -149,18 +152,37 @@ module bottom_clamp() {
 		}
 
 		// Mounting holes for thrusters
-		square2(24, 14) {
+		square2(24, 14)
 			rotate([90, 0, 0]) {
-				cylinder(d=4.5, h=50, center=true);
-				cylinder(d=7, h=33, center=true);
+				cylinder(d=4.2, h=50, center=true);
+				// Blind holes for the screw head
+				cylinder(d=10, h=25 + 4 * 2, center=true);
 			}
-		}
 	}
 
-	translate([19, -10, clamp_z])
-		rotate([90, 0, 0])
-			bolt_m5_20_hx(head_up=false);
+	// !!! Hardware !!!
+	// M5 bolt
+	// translate([clamp_x, -10, clamp_z])
+	// 	rotate([90, 0, 0])
+	// 		bolt_m5_20_hx(head_up=false);
 
+	// M5 square nut
+	// translate([clamp_x, 7, clamp_z])
+	// 	rotate([90, 0, 0])
+	// 		square_nut_m5();
+
+	// M4 bolt
+	// translate([0, 32.5, 14])
+	// 	rotate([90, 0, 0])
+	// 		bolt("M4", length=16, kind="socket_head");
+}
+
+module bottom_clamp_cut() {
+	intersection() {
+		bottom_clamp();
+		rotate([90, 0, 0])
+			cylinder(h=100, d=70, center=true, $fn=6);
+	}
 }
 
 module assembly3() {
@@ -171,21 +193,22 @@ module assembly3() {
 
 
 intersection() {
-	union() {
-		difference() {
-			assembly1();
-			// Cable hole
-			translate([0, -8, 270])
-				rotate([90, 0, 0])
-					cylinder(d=15, h=10);
-		}
-		translate([0, 0, -615])
-			assembly2();
-		translate([0, 0, -1200])
-			assembly3();
-	}
-	// translate([50, 0, 0])
-	// 	cube(size=[100, 100, 5000], center=true);
+	// union() {
+	// 	difference() {
+	// 		assembly1();
+	// 		// Cable hole
+	// 		translate([0, -8, 270])
+	// 			rotate([90, 0, 0])
+	// 				cylinder(d=15, h=10);
+	// 	}
+	// 	translate([0, 0, -615])
+	// 		assembly2();
+	// 	translate([0, 0, -1200])
+	// 		assembly3();
+	// }
+	bottom_clamp_cut();
+	translate([0, 50, 0])
+		cube(size=[100, 100, 5000], center=true);
 }
 
 
