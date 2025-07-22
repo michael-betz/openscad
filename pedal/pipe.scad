@@ -132,28 +132,28 @@ module square(dx=10, dy=0, dz=0) {
 	for (j=[-1, 1])
 		for (i=[-1, 1])
 			if (dy == 0)
-				translate([i * dx, 0, j * dz])
+				translate([i * dx / 2, 0, j * dz / 2])
 					children();
 			else
-				translate([i * dx, j * dy, 0])
+				translate([i * dx / 2, j * dy / 2, 0])
 					children();
 }
 
 module square2(dx=10, dz=0) {
 	for (i=[-1, 1]) {
-		translate([i * dx, 0, 0])
+		translate([i * dx / 2, 0, 0])
 			children();
-		translate([0, 0, i * dz])
+		translate([0, 0, i * dz / 2])
 			children();
 	}
 }
 
 module bottom_clamp() {
-	clamp_z = 19;
-	clamp_x = 16;
+	clamp_z = 20;
+	clamp_x = 32;
 
 	difference() {
-		cube(size=[65, 40, 60], center=true);
+		cube(size=[50, 40, 35], center=true);
 
 		// central hole
 		cylinder(h=100, d=25, center=true);
@@ -163,7 +163,7 @@ module bottom_clamp() {
 
 		// Square nut slots
 		square(clamp_x + 5, 0, clamp_z)
-			translate([0, 7, 0])
+			translate([0, 7 + 2, 0])
 				cube(size=[18.5, 3, 8.5], center=true);
 
 		square(clamp_x, 0, clamp_z) {
@@ -172,7 +172,7 @@ module bottom_clamp() {
 				rotate([90, 0, 0])
 					cylinder(h=40, d=6, center=true);
 			// Screw head holes
-			translate([0, -17, 0])
+			translate([0, -17 + 2, 0])
 				rotate([90, 0, 0])
 					cylinder(h=15, d=10, center=true);
 		}
@@ -188,12 +188,12 @@ module bottom_clamp() {
 
 	// !!! Hardware !!!
 	// M5 bolt
-	// translate([clamp_x, -10, clamp_z])
+	// translate([-clamp_x / 2, -8, clamp_z / 2])
 	// 	rotate([90, 0, 0])
 	// 		bolt_m5_20_hx(head_up=false);
 
 	// M5 square nut
-	// translate([clamp_x, 7, clamp_z])
+	// translate([-clamp_x / 2, 9, clamp_z / 2])
 	// 	rotate([90, 0, 0])
 	// 		square_nut_m5();
 
@@ -207,7 +207,7 @@ module bottom_clamp_cut() {
 	intersection() {
 		bottom_clamp();
 		rotate([90, 0, 0])
-			cylinder(h=100, d=70, center=true, $fn=6);
+			cylinder(h=100, d=60, center=true, $fn=6);
 	}
 }
 
@@ -240,7 +240,8 @@ module assembly3() {
 
 // Export box top_clamp
 intersection() {
-	top_clamp();
-	translate([0, 0, 50])
-		cube(size=[100, 200, 100], center=true);
+	// top_clamp();
+	bottom_clamp_cut();
+	// translate([35, 0, 0])
+	// 	cube(size=[100, 200, 100], center=true);
 }
