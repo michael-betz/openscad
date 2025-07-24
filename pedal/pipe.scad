@@ -148,12 +148,23 @@ module square2(dx=10, dz=0) {
 	}
 }
 
+module square3() {
+	children();
+	mirror([1, 0, 0])
+		children();
+	mirror([0, 0, 1]) {
+		children();
+		mirror([1, 0, 0])
+			children();
+	}
+}
+
 module bottom_clamp() {
-	clamp_z = 20;
-	clamp_x = 32;
+	clamp_z = 28;
+	clamp_x = 38;
 
 	difference() {
-		cube(size=[50, 40, 35], center=true);
+		cube(size=[53, 42, 40], center=true);
 
 		// central hole
 		cylinder(h=100, d=25, center=true);
@@ -162,9 +173,10 @@ module bottom_clamp() {
 		cube(size=[70, 2, 70], center=true);
 
 		// Square nut slots
-		square(clamp_x + 5, 0, clamp_z)
-			translate([0, 7 + 2, 0])
-				cube(size=[18.5, 3, 8.5], center=true);
+		square3()
+			translate([clamp_x / 2, 19, clamp_z / 2])
+				rotate([0, -30, 0])
+					cube(size=[8.5, 23, 8.5], center=true);
 
 		square(clamp_x, 0, clamp_z) {
 			// Screw holes
@@ -172,7 +184,7 @@ module bottom_clamp() {
 				rotate([90, 0, 0])
 					cylinder(h=40, d=6, center=true);
 			// Screw head holes
-			translate([0, -17 + 2, 0])
+			translate([0, -15, 0])
 				rotate([90, 0, 0])
 					cylinder(h=15, d=10, center=true);
 		}
@@ -194,7 +206,7 @@ module bottom_clamp() {
 
 	// M5 square nut
 	// translate([-clamp_x / 2, 9, clamp_z / 2])
-	// 	rotate([90, 0, 0])
+	// 	rotate([90, 30, 0])
 	// 		square_nut_m5();
 
 	// M4 bolt
@@ -206,15 +218,20 @@ module bottom_clamp() {
 module bottom_clamp_cut() {
 	intersection() {
 		bottom_clamp();
-		rotate([90, 0, 0])
-			cylinder(h=100, d=60, center=true, $fn=6);
+		union() {
+			rotate([90, 0, 0])
+				cylinder(h=20, d=67, center=true, $fn=6);
+			translate([0, 0, 0])
+				rotate([90, 0, 0])
+					cylinder(h=100, d=46.3, center=true, $fn=6);
+		}
 	}
 }
 
 module assembly3() {
 	pipe();
 	translate([0, 0, -272])
-		bottom_clamp();
+		bottom_clamp_cut();
 }
 
 
@@ -242,6 +259,6 @@ module assembly3() {
 intersection() {
 	// top_clamp();
 	bottom_clamp_cut();
-	// translate([35, 0, 0])
-	// 	cube(size=[100, 200, 100], center=true);
+	translate([0, 100, 0])
+		cube(size=[100, 200, 100], center=true);
 }
