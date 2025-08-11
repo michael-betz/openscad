@@ -24,6 +24,20 @@ module bms(){
 
 module box() {
 	difference() {
+		cube(size=[60, 60, 40], center=true);
+		translate([0, 0, 20])
+			scale(0.99)
+				cube(size=[59, 59, 48], center=true);
+	}
+
+	color("green")
+		translate([0, 0, -31.5])
+			rotate([0, 180, 0])
+				top_clamp();
+}
+
+module box_xl() {
+	difference() {
 		cube(size=[105, 165, 30], center=true);
 		translate([0, 0, 5])
 			scale(0.99)
@@ -41,7 +55,7 @@ module box() {
 				top_clamp();
 }
 
-module top_clamp() {
+module top_clamp_xl() {
 	difference() {
 		translate([0, 0, -9])
 			intersection() {
@@ -81,6 +95,52 @@ module top_clamp() {
 	// 	square_nut_m5();
 	// 	translate([0, 0, 17])
 	// 		bolt_m5_20_hx(head_up=false);
+	// }
+
+}
+
+module top_clamp() {
+	difference() {
+		translate([0, 0, -9])
+			intersection() {
+				translate([0, 0, 2])
+					roundedcube(size=[65, 65, 47], center=true, radius=15);
+				translate([0, 0, 12])
+					cube(size=[76, 165, 14.9 + 20], center=true);
+			}
+		// Cylinder cut
+		rotate([90, 0, 0])
+			cylinder(d=25.5, h=180, center=true);
+
+		// separation cut
+		cube(size=[100, 200, 1], center=true);
+
+		// Square nut slots
+		for (i=[-1, 1])
+			for (j=[-1, 1])
+				translate([j * 21, i * 21, 4]) {
+					// Slots
+					cube(size=[8.5, 8.5, 3], center=true);
+					// Screw holes
+					translate([0, 0, -10])
+						cylinder(h=40, d=6, center=true);
+					// Screw heads
+					if ((i % 2) == 0)
+						translate([0, 0, 26.5])
+							cylinder(h=20, d=10, center=true);
+				}
+
+		// Cable hole
+		translate([0, 21, -18])
+			cylinder(d=12, h=10);
+	}
+
+	// !!! Hardware !!!
+	// translate([21, -21, 0]) {
+	// 	translate([0, 0, 4])
+	// 		square_nut_m5();
+	// 	translate([0, 0, -15])
+	// 		bolt_m5_20_hx(head_up=true);
 	// }
 
 }
@@ -257,8 +317,9 @@ module assembly3() {
 
 // Export box top_clamp
 intersection() {
-	// top_clamp();
-	bottom_clamp_cut();
-	translate([0, 100, 0])
+	// assembly1();
+	top_clamp();
+	// bottom_clamp_cut();
+	translate([0, 0, -50])
 		cube(size=[100, 200, 100], center=true);
 }
