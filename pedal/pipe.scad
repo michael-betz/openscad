@@ -191,19 +191,15 @@ module assembly2() {
 module square(dx=10, dy=0, dz=0) {
 	for (j=[-1, 1])
 		for (i=[-1, 1])
-			if (dy == 0)
-				translate([i * dx / 2, 0, j * dz / 2])
-					children();
-			else
-				translate([i * dx / 2, j * dy / 2, 0])
-					children();
+			translate([i * dx / 2, j * dy / 2, j * dz / 2])
+				children();
 }
 
-module square2(dx=10, dz=0) {
+module square2(dx=10, dy=0, dz=0) {
 	for (i=[-1, 1]) {
 		translate([i * dx / 2, 0, 0])
 			children();
-		translate([0, 0, i * dz / 2])
+		translate([0, i * dy / 2, i * dz / 2])
 			children();
 	}
 }
@@ -250,7 +246,7 @@ module bottom_clamp() {
 		}
 
 		// Mounting holes for thrusters
-		square2(24, 14)
+		square2(24, 0, 14)
 			rotate([90, 0, 0]) {
 				cylinder(d=4.2, h=50, center=true);
 				// Blind holes for the screw head
@@ -295,31 +291,66 @@ module assembly3() {
 }
 
 
+module bottom_clamp_vertical() {
+	difference() {
+		h_cube = 30;
+		translate([0, 0, -h_cube / 2 + 10])
+			roundedcubez(size=[35, 25, h_cube], center=true, radius=11);
+
+		// Mounting holes for thrusters
+		square2(24, 14) {
+			translate([0, 0, -30])
+				cylinder(d=4.2, h=50, center=true);
+			// Blind holes for the screw head
+			h_a = -16.5;
+			h_b = 0;
+			translate([0, 0, (h_a + h_b) / 2])
+				cylinder(d=10, h=h_b - h_a, center=true);
+		}
+
+		// Make the top circular to fit in the tube
+		translate([0, 0, 25 - 10])
+			difference() {
+					cube(size=[50, 50, 50], center=true);
+				cylinder(h=51, d=22.5, center=true);
+			}
+		// 5.5 mm hole for the horizontal fixing pin
+		translate([0, 0, 5])
+			rotate([0, 90, 0])
+				cylinder(h=50, d=5.5, center=true);
+	}
+
+	// !!! Hardware !!!
+	// M5 bolt
+	// translate([24 / 2, 0, -16])
+	// 	bolt_m5_20_hx(head_up=false);
+}
+
 // Design preview
-// intersection() {
-// 	union() {
-// 		difference() {
-// 			assembly1();
-// 			// Cable hole
-// 			translate([0, -8, 260])
-// 				rotate([90, 0, 0])
-// 					cylinder(d=10, h=10);
-// 		}
-// 		// translate([0, 0, -615])
-// 		// 	assembly2();
-// 		// translate([0, 0, -1200])
-// 		// 	assembly3();
-// 	}
-// 	translate([-50, 0, 0])
-// 		cube(size=[100, 100, 5000], center=true);
-// }
+intersection() {
+	union() {
+		// difference() {
+		// 	assembly1();
+		// 	// Cable hole
+		// 	translate([0, -8, 260])
+		// 		rotate([90, 0, 0])
+		// 			cylinder(d=10, h=10);
+		// }
+		// translate([0, 0, -615])
+		// 	assembly2();
+		// translate([0, 0, -1200])
+			// assembly3();
+		bottom_clamp_vertical();
+	}
+	// translate([-50 + 12, 0, 0])
+	// 	cube(size=[100, 100, 5000], center=true);
+}
 
 
 // Export box top_clamp
-intersection() {
-	// assembly1();
-	top_clamp();
-	// bottom_clamp_cut();
-	translate([0, 0, -50])
-		cube(size=[100, 200, 100], center=true);
-}
+// intersection() {
+// 	top_clamp();
+// 	translate([0, 0, -50])
+// 		cube(size=[100, 200, 100], center=true);
+// }
+
