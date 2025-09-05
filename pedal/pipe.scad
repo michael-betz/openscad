@@ -188,14 +188,14 @@ module assembly2() {
  		coupler();
 }
 
-module square(dx=10, dy=0, dz=0) {
+module square_copy(dx=10, dy=0, dz=0) {
 	for (j=[-1, 1])
 		for (i=[-1, 1])
 			translate([i * dx / 2, j * dy / 2, j * dz / 2])
 				children();
 }
 
-module square2(dx=10, dy=0, dz=0) {
+module square_copy2(dx=10, dy=0, dz=0) {
 	for (i=[-1, 1]) {
 		translate([i * dx / 2, 0, 0])
 			children();
@@ -204,7 +204,7 @@ module square2(dx=10, dy=0, dz=0) {
 	}
 }
 
-module square3() {
+module square_copy3() {
 	children();
 	mirror([1, 0, 0])
 		children();
@@ -229,12 +229,12 @@ module bottom_clamp() {
 		cube(size=[70, 2, 70], center=true);
 
 		// Square nut slots
-		square3()
+		square_copy3()
 			translate([clamp_x / 2, 19, clamp_z / 2])
 				rotate([0, -30, 0])
 					cube(size=[8.5, 23, 8.5], center=true);
 
-		square(clamp_x, 0, clamp_z) {
+		square_copy(clamp_x, 0, clamp_z) {
 			// Screw holes
 			translate([0, -5, 0])
 				rotate([90, 0, 0])
@@ -246,7 +246,7 @@ module bottom_clamp() {
 		}
 
 		// Mounting holes for thrusters
-		square2(24, 0, 14)
+		square_copy2(24, 0, 14)
 			rotate([90, 0, 0]) {
 				cylinder(d=4.2, h=50, center=true);
 				// Blind holes for the screw head
@@ -290,40 +290,85 @@ module assembly3() {
 		bottom_clamp_cut();
 }
 
+module footprint_cutter() {
+	difference() {
+		cube(size=[50, 50, 20], center=true);
+		roundedcubez(size=[44, 30, 21], center=true, radius=5);
+	}
+}
 
 module bottom_clamp_vertical() {
 	difference() {
-		h_cube = 30;
-		translate([0, 0, -h_cube / 2 + 10])
-			roundedcubez(size=[35, 25, h_cube], center=true, radius=11);
+		// Cylinder on top which fits in the carbon pipe
+		translate([0, 0, 15])
+			cylinder(h=30, d=22.5, center=true);
 
-		// Mounting holes for thrusters
-		square2(24, 14) {
-			translate([0, 0, -30])
-				cylinder(d=4.2, h=50, center=true);
-			// Blind holes for the screw head
-			h_a = -16.5;
-			h_b = 0;
-			translate([0, 0, (h_a + h_b) / 2])
-				cylinder(d=10, h=h_b - h_a, center=true);
-		}
+		// notch for o-ring
+		translate([0, 0, 25])
+			rotate_extrude()
+				translate([10.2, 0, 0])
+					slot(2.7);
 
-		// Make the top circular to fit in the tube
-		translate([0, 0, 25 - 10])
-			difference() {
-					cube(size=[50, 50, 50], center=true);
-				cylinder(h=51, d=22.5, center=true);
-			}
 		// 5.5 mm hole for the horizontal fixing pin
-		translate([0, 0, 5])
-			rotate([0, 90, 0])
+		translate([0, 0, 10])
+			rotate([0, 90, 90])
 				cylinder(h=50, d=5.5, center=true);
 	}
+
+	h_cone = 20;
+	translate([0, 0, -h_cone])
+		difference() {
+			union() {
+				// adapting cone
+				translate([0, 0, h_cone / 2])
+					cylinder(d1=44, d2=22.5, h=h_cone, center=true);
+
+				h_cube = 5;
+				translate([0, 0, h_cube / 2])
+					cube(size=[49, 35, h_cube], center=true);
+			}
+
+			square_copy(35, 16) {
+				// Mounting holes for thrusters
+				cylinder(d=4, h=50, center=true);
+				// Blind holes for the screw head
+				translate([0, 0, 10 + 3])
+					cylinder(d=8, h=20, center=true);
+			}
+
+			translate([0, 0, 9])
+			footprint_cutter();
+		}
 
 	// !!! Hardware !!!
 	// M5 bolt
 	// translate([24 / 2, 0, -16])
 	// 	bolt_m5_20_hx(head_up=false);
+}
+
+module sugar_cane(d=6.75, d_bend=15) {
+	translate([0, 0, 36 / 2])
+		cylinder(d=d, h=36.1, center=true);
+	translate([-d_bend, 0, 0])
+		rotate([-90, 0, 0])
+			intersection() {
+				rotate_extrude()
+					translate([d_bend, 0, 0])
+						circle(d / 2);
+				translate([0, 0, -10])
+					cube(size=[40, 40, 20], center=false);
+			}
+}
+
+module bottom_clamp_vertical_cable_channel() {
+	difference() {
+		z_pos = 0;
+		bottom_clamp_vertical();
+		// cable channel
+		translate([7.75, 0, 4])
+			rotate([0, 8, 180])
+				sugar_cane(7, 18);
+	}
 }
 
 // Design preview
@@ -339,10 +384,10 @@ intersection() {
 		// translate([0, 0, -615])
 		// 	assembly2();
 		// translate([0, 0, -1200])
-			// assembly3();
-		bottom_clamp_vertical();
+		// 	assembly3();
+		bottom_clamp_vertical_cable_channel();
 	}
-	// translate([-50 + 12, 0, 0])
+	// translate([0, 50, 0])
 	// 	cube(size=[100, 100, 5000], center=true);
 }
 
@@ -354,3 +399,9 @@ intersection() {
 // 		cube(size=[100, 200, 100], center=true);
 // }
 
+
+module slot(d=2.7) {
+	translate([2.5, 0, 0])
+		square(size=[5, d], center=true);
+	circle(d=d);
+}

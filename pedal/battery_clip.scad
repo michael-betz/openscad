@@ -128,9 +128,9 @@ module main() {
 	translate([0, 0, -300])
 		pipe();
 	// middle_clip();
-	!end_clip_glue();
+	// end_clip_glue();
 	// c_clip();
-	// !o_ring_clip(true);
+	o_ring_clip(true);
 }
 
 intersection() {
