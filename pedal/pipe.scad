@@ -297,17 +297,30 @@ module footprint_cutter() {
 	}
 }
 
+module slot(d=2.7) {
+	translate([2.5, 0, 0])
+		square(size=[5, d], center=true);
+	circle(d=d);
+}
+
+
+module slot2(d=2.7) {
+	translate([-5, 0, 0])
+		square(size=[10, d], center=true);
+	circle(d=d);
+}
+
 module bottom_clamp_vertical() {
 	difference() {
 		// Cylinder on top which fits in the carbon pipe
 		translate([0, 0, 15])
-			cylinder(h=30, d=22.5, center=true);
+			cylinder(h=35, d=22.6, center=true);
 
 		// notch for o-ring
-		translate([0, 0, 25])
+		translate([0, 0, 29])
 			rotate_extrude()
-				translate([10.2, 0, 0])
-					slot(2.7);
+				translate([10.5, 0, 0])
+					slot(2.5);
 
 		// 5.5 mm hole for the horizontal fixing pin
 		translate([0, 0, 10])
@@ -321,7 +334,7 @@ module bottom_clamp_vertical() {
 			union() {
 				// adapting cone
 				translate([0, 0, h_cone / 2])
-					cylinder(d1=44, d2=22.5, h=h_cone, center=true);
+					cylinder(d1=44, d2=25, h=h_cone, center=true);
 
 				h_cube = 5;
 				translate([0, 0, h_cube / 2])
@@ -346,28 +359,41 @@ module bottom_clamp_vertical() {
 	// 	bolt_m5_20_hx(head_up=false);
 }
 
-module sugar_cane(d=6.75, d_bend=15) {
-	translate([0, 0, 36 / 2])
-		cylinder(d=d, h=36.1, center=true);
-	translate([-d_bend, 0, 0])
-		rotate([-90, 0, 0])
-			intersection() {
-				rotate_extrude()
-					translate([d_bend, 0, 0])
-						circle(d / 2);
-				translate([0, 0, -10])
-					cube(size=[40, 40, 20], center=false);
-			}
+module torus_section(d=6.75, r_bend=15, angle=90, use_slot=false) {
+	rotate_extrude(angle=angle)
+		translate([r_bend, 0, 0])
+			if (use_slot)
+				slot2(d);
+			else
+				circle(d / 2);
+}
+
+module sugar_cane(d=6.75, r_bend=15, h=36, angle=90, use_slot=false) {
+	translate([-r_bend, 0, 0]) {
+		end_x = r_bend * cos(angle);
+		end_y = r_bend * sin(angle);
+		translate([end_x, end_y, 0])
+			rotate([0, 0, angle - 90])
+				translate([-h / 2, 0, 0])
+					rotate([0, 90, 0])
+						cylinder(d=d, h=h+0.1, center=true);
+		torus_section(d, r_bend, angle, use_slot);
+	}
 }
 
 module bottom_clamp_vertical_cable_channel() {
 	difference() {
-		z_pos = 0;
+		x_pos = 0;
 		bottom_clamp_vertical();
-		// cable channel
-		translate([7.75, 0, 4])
-			rotate([0, 8, 180])
-				sugar_cane(7, 18);
+		// cable channel bottom
+		translate([22.5 + x_pos, 0, -15])
+			rotate([-90, 90, 0])
+				sugar_cane(8, 16, 12, 90, use_slot=true);
+
+		// cable channel top
+		translate([6.5 + x_pos, 0, 11.8])
+			rotate([90, 0, 0])
+				sugar_cane(8, 17, 30, 15);
 	}
 }
 
@@ -399,9 +425,3 @@ intersection() {
 // 		cube(size=[100, 200, 100], center=true);
 // }
 
-
-module slot(d=2.7) {
-	translate([2.5, 0, 0])
-		square(size=[5, d], center=true);
-	circle(d=d);
-}
