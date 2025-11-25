@@ -1,6 +1,7 @@
 $fn = $preview ? 30 : 150;
 
-d_cam = 48.3;  // camera diameter (between 2 flat sides)
+// first print: d_cam = 48.5 mm
+d_cam = 48.5;  // camera diameter (between 2 flat sides)
 y_dist = 15;  // distance between cam and alu profile
 t_wall = 5;  // wall thickness
 
@@ -46,6 +47,6 @@ module screw() {
 
 intersection() {
 	main();
-	// translate([0, 0, -50 + 7])
-	// 	cube(size=[100, 100, 100], center=true);
+	translate([0, 0, -50 + 7])
+		cube(size=[100, 100, 100], center=true);
 }
