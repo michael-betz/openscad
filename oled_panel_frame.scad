@@ -17,8 +17,8 @@ gap = 0.5;
 h_offset = 7.0;
 
 // The rounded lip part
-d_lip = 4.5;
-y_lip = 1.25;
+d_lip = 4;
+y_lip = -1;
 
 
 module panel() {
@@ -34,8 +34,8 @@ module panel() {
 
 module oled_frame() {
 	difference() {
-		translate([0, -shell_thickness, (h_offset + t_panel + gap) / 2])
-			cube(size=[w_panel + shell_thickness * 4, h_panel + shell_thickness * 4, h_offset + t_panel + gap], center=true);
+		translate([0, 0, (h_offset + t_panel - 1.25 + gap * 2) / 2])
+			cube(size=[w_panel + shell_thickness * 4, 30, h_offset + t_panel - 1.25 + gap * 2], center=true);
 
 		// pocket for the display
 		translate([0, 0, 5 + h_offset])
@@ -54,18 +54,24 @@ module oled_frame() {
 		cube(size=[w_flex + 2 * gap, 100, 14 - d_lip * 2], center=true);
 
 		// slots for square nuts
-		for (i=[-1, 1])
+		for (i=[-1, 1]) {
 			translate([40 * i, 0, 3]) {
 				translate([2 * i, 0, 0])
 					cube(size=[10, 6, 2.25], center=true);
-				cylinder(h=7, d=3.5, center=true);
+				translate([0, 0, -1])
+					cylinder(h=7, d=3.5, center=true);
 			}
+			// Dog bones
+			translate([i * ((w_panel + gap) / 2 - 0.8), ((h_panel + gap) / 2 - 0.8), 5 + h_offset - 1.3])
+				cylinder(h=10, d=3, center=true);
+			// translate([i * ((w_panel + gap) / 2 - 0.8), -((h_panel + gap) / 2 - 0.8), 5 + h_offset])
+			// 	cylinder(h=10, d=3, center=true);
+			translate([i * ((w_panel + gap) / 2 - 0.8), -((h_panel + gap) / 2 - 0.8) + 2, 5 + h_offset - 1.3])
+				cylinder(h=10, d=3, center=true);
 
-		// Dog bones
-		for (i=[-1, 1])
-			for (j=[-1, 1])
-				translate([i * ((w_panel + gap) / 2 - 0.5), j * ((h_panel + gap) / 2 - 0.5), 5 + h_offset])
-					cylinder(h=10, d=2.5, center=true);
+			translate([i * ((w_panel + gap) / 2 - 1), -((h_panel + gap) / 2 - 1) + 0.75, 5 + h_offset])
+				cylinder(h=10, d=5, center=true);
+		}
 	}
 
 	// The rounded lip
@@ -75,15 +81,21 @@ module oled_frame() {
 	}
 }
 
-
-
-// translate([0, 0, h_offset])
+// translate([0, 0, h_offset - 1.25 + gap])
 // 	panel();
 
+module all()
+{
+	difference() {
+		oled_frame();
+		// Cut a deeper notch for the bottom glass plate
+		translate([0, 1, 5 + h_offset - 1.3])
+			cube(size=[w_panel + gap * 2, h_panel + gap * 2 - 2, 10], center=true);
+	}
+}
 
-
-// intersection() {
-	oled_frame();
+intersection() {
+	all();
 	// translate([50, 0, 0])
 	// 	cube(size=[100, 100, 100], center=true);
-// }
+}
