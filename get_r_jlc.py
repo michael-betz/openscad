@@ -131,8 +131,16 @@ def best_combo(values, target, max_n=3):
 
 
 if __name__ == "__main__":
+    if len(argv) not in (2, 3):
+        print(f"Usage: {argv[0]} <target_value_ohm> [<max_number_of_resistors>]")
+        exit(-1)
+
     r_target = float(argv[1])
-    best, best_err = best_combo(r_values, r_target, max_n=3)
+    max_n = 3
+    if len(argv) > 2:
+        max_n = int(argv[2])
+
+    best, best_err = best_combo(r_values, r_target, max_n=max_n)
 
     print("best match:", best)
     print(f"error: {best_err:.3} Ohm, {(best[2] - r_target) / r_target * 100:.1f} %")
