@@ -49,7 +49,6 @@ module crt_flange_neg() {
 module main() {
 	d1 = 25;
 	d2 = 40;
-	fn = 9;
 
 	difference() {
 		union() {

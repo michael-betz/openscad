@@ -18,13 +18,13 @@ module box() {
 	}
 }
 
-// box();
+box();
 
 translate([0, t_wall / 4, 18])
 	cube(size=[w_batt + t_wall - 0.5, h_batt + 1.5 * t_wall - 0.1, t_wall], center=true);
 
-// intersection() {
-// 	box();
-// 	translate([50, 0, 0])
-// 		cube([100, 100, 100], center=true);
-// }
+intersection() {
+	box();
+	translate([50, 0, 0])
+		cube([100, 100, 100], center=true);
+}
