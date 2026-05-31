@@ -173,12 +173,12 @@ module assembly1() {
 		translate([0, 0, i * batt_pitch - 60])
 			batt();
 
-	translate([0, -31.5, 200])
+	translate([0, -31.5, 260])
 		rotate([90, 0, 0])
 			box();
 
-	translate([0, 0, 304])
-		handle();
+// 	translate([0, 0, 304])
+// 		handle();
 }
 
 module assembly2() {
@@ -400,18 +400,18 @@ module bottom_clamp_vertical_cable_channel() {
 // Design preview
 intersection() {
 	union() {
-		// difference() {
-		// 	assembly1();
-		// 	// Cable hole
-		// 	translate([0, -8, 260])
-		// 		rotate([90, 0, 0])
-		// 			cylinder(d=10, h=10);
-		// }
+		difference() {
+			assembly1();
+			// // Cable hole
+			// translate([0, -8, 260])
+			// 	rotate([90, 0, 0])
+			// 		cylinder(d=10, h=10);
+		}
 		// translate([0, 0, -615])
 		// 	assembly2();
 		// translate([0, 0, -1200])
 		// 	assembly3();
-		bottom_clamp_vertical_cable_channel();
+		// bottom_clamp_vertical_cable_channel();
 	}
 	// translate([0, 50, 0])
 	// 	cube(size=[100, 100, 5000], center=true);

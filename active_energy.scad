@@ -26,7 +26,13 @@ module clip() {
 		}
 }
 
-clip();
-
 // Power supply
-cube_(size=[71.5, 50, 38.5]);
+module psu() {
+	translate([0, 26, (38.5 - 43) / 2])
+		cube_(size=[79, 2, 43]);
+	cube_(size=[71.5, 50, 38.5]);
+}
+
+psu();
+
+clip();
