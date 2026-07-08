@@ -55,13 +55,13 @@ module end_clip() {
 module end_clip_glue() {
 	difference() {
 		union() {
-			h = 4;
+			h = 10;
 			translate([0, 0, -h / 2])
 				cylinder(h=h, d=22, center=true);
 
 			// flange
 			translate([0, 0, 1])
-				cylinder(h=2, d=24, center=true);
+				cylinder(h=2, d=25, center=true);
 		}
 	}
 }
@@ -128,9 +128,9 @@ module main() {
 	translate([0, 0, -300])
 		pipe();
 	// middle_clip();
-	// end_clip_glue();
+	!end_clip_glue();
 	// c_clip();
-	o_ring_clip(true);
+	// o_ring_clip(true);
 }
 
 intersection() {

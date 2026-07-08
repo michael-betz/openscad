@@ -2,6 +2,7 @@ $fn = $preview ? 30 : 100;
 
 include <../roundedcube.scad>
 include <../ali_parts.scad>
+include <throttle.scad>
 
 module pipe() {
 	difference() {
@@ -397,11 +398,17 @@ module bottom_clamp_vertical_cable_channel() {
 	}
 }
 
+
 // Design preview
 intersection() {
 	union() {
 		difference() {
-			assembly1();
+			union() {
+				assembly1();
+				translate([0, 0, 209])
+					rotate([0, 0, 0])
+						trigger_clamp();
+			}
 			// // Cable hole
 			// translate([0, -8, 260])
 			// 	rotate([90, 0, 0])
@@ -413,7 +420,7 @@ intersection() {
 		// 	assembly3();
 		// bottom_clamp_vertical_cable_channel();
 	}
-	// translate([0, 50, 0])
+	// translate([50, 0, 0])
 	// 	cube(size=[100, 100, 5000], center=true);
 }
 
