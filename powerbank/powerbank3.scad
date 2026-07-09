@@ -1,6 +1,6 @@
 $fn=50;
 
-include <roundedcube.scad>
+include <../roundedcube.scad>
 
 
 r_corner = 5;
@@ -160,12 +160,12 @@ module main() {
     color("orange")
         for (z = [plate_z, -plate_z + pcb_t])
             translate([0, 0, z])
-                !denim_plate();
+                denim_plate();
 }
 
 
 intersection() {
     main();
-    // translate([0, 100, 0])
-    //     cube([200, 200, 200], center=true);
+    translate([0, 100, 0])
+        cube([200, 200, 200], center=true);
 }

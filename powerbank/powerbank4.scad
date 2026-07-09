@@ -1,13 +1,19 @@
 // for the big one, found in 03/2023
 
-$fn=50;
+$fn=75;
 
+include <../roundedcube.scad>
+
+// TODO confirm dimension
 w_batt = 61;
-h_batt = 80;
+h_batt = 78;
 t_batt = 38;
 
 // Make it a multiple of nozzle size
-t_wall = 1.2;
+t_wall = 1.8;
+
+// corner radius
+rad = 5.0;
 
 // thickness of the PCB holder
 pcb_t = 7;
@@ -20,16 +26,9 @@ pcb_y = -h_batt / 2 + h_pcb / 2;
 pcb_z = pcb_t / 2 + t_batt / 2 + 0.01;
 
 // thickness of the top and bottom denim-lined plates
-h_plates = 1;
+h_plates = 1.25;
 t_denim = 0.75;
 plate_z = t_batt / 2 + h_plates / 2 + pcb_t + t_denim;
-
-module corners(w=10, h=5) {
-    for (i = [-1, 1])
-        for (j = [-1, 1])
-            translate([w / 2 * i, h / 2 * j, 0]) children(0);
-}
-
 
 module batt() {
     // color("green") {
@@ -46,9 +45,9 @@ module box() {
     translate([0, 0, pcb_t / 2])
         difference() {
             // outer dimensions of box
-            cube(size=[w_batt + 2 * t_wall, h_batt + 2 * t_wall, h_box], center=true);
+            roundedcubez(size=[w_batt + 2 * t_wall + rad / 2, h_batt + 2 * t_wall + rad / 2, h_box], radius=rad, center=true);
             // inner dimensions of box
-            cube(size=[w_batt, h_batt, h_box + 1], center=true);
+            roundedcubez(size=[w_batt + rad / 2, h_batt + rad / 2, h_box + 1], radius=rad, center=true);
             // bottom notch for lid
             // translate([0, 0, (t_wall - h_box - 0.01) / 2])
             //     cube(size=[w_batt + t_wall, h_batt + t_wall, t_wall], center=true);
@@ -75,9 +74,9 @@ module usb_holes() {
             cube(size=[10, 10, 7], center=true);
 
         // button hole
-        translate([-17, -53, -2])
+        translate([-19, -53, -2])
             rotate([90, 0, 0])
-                cylinder(h=10, d=5, center=true);
+                cylinder(h=10, d=4, center=true);
 
         // LED holes
         translate([-16, -53 + 9, 10])
@@ -88,17 +87,17 @@ module usb_holes() {
 
 module pcb_holder() {
     difference() {
-        cube(size=[w_batt - 1, h_batt - 1, pcb_t], center=true);
+        roundedcubez(size=[w_batt + rad / 2 - 1, h_batt + rad / 2 - 1, pcb_t], radius=rad, center=true);
 
         // cavity for PCB
-        translate([pcb_x, pcb_y, 0])
-            cube(size=[w_pcb, h_pcb, 10], center=true);
+        translate([pcb_x + 5, pcb_y - 5, 0])
+            cube(size=[w_pcb + 10, h_pcb + 10, 10], center=true);
     }
 }
 
 module denim_plate() {
     difference() {
-        cube(size=[w_batt - 2 * t_denim, h_batt - 2 * t_denim, h_plates], center=true);
+        roundedcubez(size=[w_batt + rad / 2 - 2 * t_denim, h_batt + rad / 2 - 2 * t_denim, h_plates], radius=rad, center=true);
         translate([pcb_x, pcb_y, -10])
             usb_holes();
     }
@@ -107,18 +106,20 @@ module denim_plate() {
 
 intersection() {
     union() {
-        batt();
         box();
+
+        color("red")
+            batt();
 
         color("orange")
             for (z = [plate_z, -plate_z + pcb_t])
                 translate([0, 0, z])
-                    denim_plate();
+                    !denim_plate();
 
-        // color("blue")
-        //     translate([0, 0, pcb_z])
-        //         !pcb_holder();
+        color("blue")
+            translate([0, 0, pcb_z])
+                pcb_holder();
     }
-    // translate([0, 100, 0])
-    //     cube([200, 200, 200], center=true);
+    translate([0, 0, -75])
+        cube([200, 200, 200], center=true);
 }
