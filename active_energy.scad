@@ -1,16 +1,24 @@
 $fn = $preview ? 30 : 100;
 
 include <roundedcube.scad>
+include <ali_parts.scad>
+
+// PCB mounting
+w_mount = 52.8;
+h_mount = 31.6;
+
 
 module clip() {
 	translate([5, 0, -7.5])
 		difference() {
 			translate([-5, 0, -7.5])
 				roundedcubez_(size=[75, 60, 15], radius=10);
-			translate([-17.5 - 8, 0, -27.5 + 5])
-				cube(size=[100, 40, 40], center=true);
-			translate([-17.5 - 8, 0, 0])
-				cube(size=[100, 53, 5.1], center=true);
+			translate([3, 0, 0]) {
+				translate([-17.5 - 8, 0, -27.5 + 5])
+					cube(size=[100, 40, 40], center=true);
+				translate([-17.5 - 8, 0, 0])
+					cube(size=[100, 53, 5.1], center=true);
+			}
 			for (i=[-1, 1])
 				translate([30, 9 * i, -1])
 					rotate([0, 90, 0])
@@ -31,14 +39,20 @@ module clip() {
 					cube(size=[150, 200, 21], center=true);
 				}
 
+			translate([-12, 0, -5])
+				difference() {
+					cube_(size=[20, 53, 5]);
+					translate([17, 0, -6])
+						rotate([0, -10, 0])
+							cube_(size=[50, 53, 10]);
+				}
+
 			// PCB mounting
-			w = 52.8;
-			h = 31.6;
 			for (i=[-1, 1])
 				for (j=[-1, 1])
-					translate([i * w / 2 - 10, j * h / 2, 0]) {
-						cylinder(h=20, d=3, center=true);
-						cylinder(h=5.5 + 2.5 * 2, d=7, center=true);
+					translate([i * w_mount / 2 - 10, j * h_mount / 2, 0]) {
+						cylinder(h=20, d=3.5, center=true);
+						cylinder(h=5.5 + 2.5 * 2, d=8, center=true);
 					}
 		}
 }
@@ -53,3 +67,7 @@ module psu() {
 // psu();
 
 clip();
+
+// translate([w_mount/2 - 5, h_mount/2, -10])
+// 	bolt_m3_20_cs(head_up=true);
+
