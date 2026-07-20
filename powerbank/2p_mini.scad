@@ -11,8 +11,6 @@ module batt(d=18.5) {
 				cylinder(h=65.5, d=d, center=true);
 }
 
-
-
 module batt_plate(with_channel=false) {
 	difference() {
 		translate([0, 0, -h_batt])
@@ -37,22 +35,78 @@ module batt_plate(with_channel=false) {
 	}
 }
 
+module board(){
+	difference() {
+		translate([0, -28 / 2, 0])
+			cube(size=[33, 28, 3]);
+		// Right long hole
+		translate([32, 0, 0])
+			cylinder(h=10, d=2.6, center=true);
+		translate([32 + 2.6 / 2, 0, 0])
+			cube([2.6, 2.6, 10], center=true);
+		for (i=[-1, 1]) {
+			// Top bottom hole
+			translate([12, i * 28 / 2, 0])
+				cylinder(h=10, d=2.6, center=true);
+			// Poewr hole
+			translate([32.2 - 1, i * 5, 0])
+				cylinder(h=10, d=1.6, center=true);
+		}
+	}
+	// USB
+	color("blue")
+		translate([-1, -9 / 2, 3])
+			cube(size=[7.5, 9, 5 - 3]);
+	// Btn
+	color("white")
+		translate([2.25, -14.5, 3])
+			cube(size=[7, 2.5, 5.25 -3]);
+	// L
+	color("black")
+		translate([17, -14, 3])
+			cube(size=[10.5, 10.5, 5.5 -3]);
+}
+
 module board_stamp(){
 	translate([0, 19, 0])
-		cube_(size=[29, 33.5, 5]);
-	translate([0, 10, 0])
-		cube_(size=[20, 30, 5]);
+		cube_(size=[29, 33.5, 3.5]);
+
+	translate([0, 1.5, 0])
+		cube_(size=[20, 10, 4]);
+	// USB
+	translate([0, 32.7, -0.1])
+		cube_([10, 9, 10]);
+	// L
+	translate([-8.7, 13.2, -0.1])
+		cube_([12, 12, 10]);
+	// Switch
+	translate([-13.75, 29.8, 1.5])
+		cube_([5, 8.5, 5]);
+	// Switch hole
+	translate([-25, 29.8, 4])
+		rotate([0, 90, 0])
+			cylinder(d=3, h=10);
+	// LEDs
+	translate([12.5, 30.5, -0.1])
+		cube_([4, 10.5, 10]);
 }
 
 module top_plate_b() {
 	difference() {
-		roundedcubez_([41, 71, 5], 7);
+		roundedcubez_([41, 71, 5.5], 7);
 		translate([0, 0, -0.1])
 			board_stamp();
+
 		// cable channel
 		translate([0, 0, -0.1])
 			cube_([6.4, 100, 3.5]);
 	}
+	// Pins
+	translate([0, 3.3, 0])
+		cylinder(h=5.5, d=2.3);
+	for (i=[-1, 1])
+		translate([i * 28.5 / 2, 23.5, 0])
+			cylinder(h=5.5, d=2.3);
 }
 
 module shell() {
@@ -63,27 +117,36 @@ module shell() {
 			translate([0, 0, -1])
 				roundedcubez_([42, 72, h + 10], 7);
 			// Hole for USB-C
-			translate([0, 41, 22.5])
+			translate([0, 41, 23.5])
 				rotate([90, 0, 0])
 					roundedcubez_(size=[10, 3, 10], radius=1);
+			// Button
+			translate([-25, 29.8, 23.65])
+				rotate([0, 90, 0])
+					cylinder(h=10, d=3);
 		}
 }
 
 module all() {
-	batt();
-	batt_plate();
-	mirror([0, 0, 1])
-		batt_plate(true);
+	// batt();
+	// batt_plate();
+	// mirror([0, 0, 1])
+	// 	batt_plate(true);
 
 	translate([0, 0, h_batt])
 		top_plate_b();
 
+	translate([0, 35.5, 9.4])
+		rotate([0, 0, -90])
+			board();
+
 	translate([0, 0, 0.75])
-		shell();
+		!shell();
 }
 
 intersection() {
 	all();
-	// translate([100, 0, 0])
+	// translate([83, 0, 0])
 	// 	cube(size=[200, 200, 200], center=true);
 }
+
