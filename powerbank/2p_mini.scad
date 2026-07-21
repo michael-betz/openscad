@@ -91,11 +91,26 @@ module board_stamp(){
 		cube_([4, 10.5, 10]);
 }
 
+module top_plate_chamfer(angle=30) {
+	for (i=[-1, 1])
+		translate([i * 41 / 2, 0, 0])
+			rotate([0, -i * angle, 0])
+				cube(size=[20, 100, 20], center=true);
+
+	for (j=[-1, 1])
+		translate([0, j * 71 / 2, 0])
+			rotate([j * angle, 0, 0])
+				cube(size=[100, 20, 20], center=true);
+}
+
 module top_plate_b() {
 	difference() {
 		roundedcubez_([41, 71, 5.5], 7);
 		translate([0, 0, -0.1])
 			board_stamp();
+
+		translate([0, 0, -9])
+			top_plate_chamfer(40);
 
 		// cable channel
 		translate([0, 0, -0.1])
@@ -108,6 +123,8 @@ module top_plate_b() {
 		translate([i * 28.5 / 2, 23.5, 0])
 			cylinder(h=5.5, d=2.3);
 }
+
+top_plate_b();
 
 module shell() {
 	h = 22;
@@ -129,7 +146,7 @@ module shell() {
 
 module all() {
 	// batt();
-	// batt_plate();
+	batt_plate();
 	// mirror([0, 0, 1])
 	// 	batt_plate(true);
 
@@ -141,12 +158,12 @@ module all() {
 			board();
 
 	translate([0, 0, 0.75])
-		!shell();
+		shell();
 }
 
-intersection() {
-	all();
+// intersection() {
+// 	all();
 	// translate([83, 0, 0])
 	// 	cube(size=[200, 200, 200], center=true);
-}
+// }
 
