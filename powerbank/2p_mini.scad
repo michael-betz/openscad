@@ -20,7 +20,7 @@ module batt_plate(with_channel=false) {
 			cube(size=[5, 100, 5], center=true);
 			// cable channel
 			if (with_channel)
-				translate([0, 0, -11])
+				translate([0, 0, -10.5])
 					rotate([90, 0, 0])
 						cylinder(h=75, d=7, center=true);
 			for (i=[-1, 1]) {
@@ -32,6 +32,10 @@ module batt_plate(with_channel=false) {
 					translate([0, i * 35, -15])
 						cube_([7, 8, 20]);
 			}
+
+			if (with_channel)
+				translate([0, 0, -19])
+					top_plate_chamfer(50, x=45, y=78);
 	}
 }
 
@@ -91,14 +95,14 @@ module board_stamp(){
 		cube_([4, 10.5, 10]);
 }
 
-module top_plate_chamfer(angle=30) {
+module top_plate_chamfer(angle=30, x=41, y=71) {
 	for (i=[-1, 1])
-		translate([i * 41 / 2, 0, 0])
+		translate([i * x / 2, 0, 0])
 			rotate([0, -i * angle, 0])
 				cube(size=[20, 100, 20], center=true);
 
 	for (j=[-1, 1])
-		translate([0, j * 71 / 2, 0])
+		translate([0, j * y / 2, 0])
 			rotate([j * angle, 0, 0])
 				cube(size=[100, 20, 20], center=true);
 }
@@ -124,13 +128,12 @@ module top_plate_b() {
 			cylinder(h=5.5, d=2.3);
 }
 
-top_plate_b();
-
 module shell() {
 	h = 22;
+	thck = 3;
 	translate([0, 0, -h/2])
 		difference() {
-			roundedcubez_([44, 74, h + 4], 7);
+			roundedcubez_([42 + thck, 72 + thck, h + 4], 7);
 			translate([0, 0, -1])
 				roundedcubez_([42, 72, h + 10], 7);
 			// Hole for USB-C
@@ -144,26 +147,32 @@ module shell() {
 		}
 }
 
-module all() {
-	// batt();
-	batt_plate();
-	// mirror([0, 0, 1])
-	// 	batt_plate(true);
-
-	translate([0, 0, h_batt])
-		top_plate_b();
-
-	translate([0, 35.5, 9.4])
-		rotate([0, 0, -90])
-			board();
-
-	translate([0, 0, 0.75])
-		shell();
+module pin() {
+	cylinder(d=2.5, h=7.5);
+	cylinder(d=3.5, h=1);
 }
 
-// intersection() {
-// 	all();
+module all() {
+	// batt();
+	// batt_plate();
+	mirror([0, 0, 1])
+		batt_plate(true);
+
+	// translate([0, 0, h_batt])
+	// 	top_plate_b();
+
+	// translate([0, 35.5, 9.4])
+	// 	rotate([0, 0, -90])
+	// 		board();
+
+	// translate([0, 0, 0.75])
+	// 	shell();
+}
+
+intersection() {
+	all();
 	// translate([83, 0, 0])
 	// 	cube(size=[200, 200, 200], center=true);
-// }
+}
 
+// pin();
