@@ -38,4 +38,29 @@ module mounting_plate() {
 	}
 }
 
-mounting_plate();
+module syringe() {
+	translate([0, 0, 97 + 5 + 2])
+		rotate([180, 0, 0])
+			rotate_extrude()
+				polygon([
+					[0, 0],
+					[25.5 / 2, 0],
+					[25.2 / 2, 97],
+					[10.2 / 2, 97 + 5],
+					[10.2 / 2, 97 + 5 + 7.5],
+					[0, 97 + 5 + 7.5],
+				]);
+}
+
+// mounting_plate();
+
+difference() {
+	cube_(size=[30, 30, 60]);
+	syringe();
+	translate([0, -15, 15])
+		cube_(size=[31, 30, 30]);
+	translate([0, -0.5, 32])
+		cube_(size=[31, 1, 30]);
+}
+
+// syringe();
